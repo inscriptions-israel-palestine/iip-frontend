@@ -29,18 +29,20 @@
 		return map;
 	}
 
-    function addMarker(map: mapboxgl.Map, inscription: Inscription) {
-        const marker = new mapboxgl.Marker().setLngLat(inscription.location_coordinates as LngLatLike);
+	function addMarker(map: mapboxgl.Map, inscription: Inscription) {
+		const marker = new mapboxgl.Marker().setLngLat(inscription.location_coordinates as LngLatLike);
 
-        marker.addTo(map);
-    }
+		marker.addTo(map);
+	}
 
-    onMount(async () => {
-		map = initializeMap();
+	onMount(async () => {
+		if (inscription.location_coordinates) {
+			map = initializeMap();
 
-		map.on('load', () => {
-            addMarker(map, inscription);
-		});
+			map.on('load', () => {
+				addMarker(map, inscription);
+			});
+		}
 	});
 
 	onDestroy(() => {

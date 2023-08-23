@@ -13,7 +13,7 @@
 </script>
 
 <main class="py-10">
-	<div class="px-4 sm:px-6 lg:px-8">
+	<div class="px-4 sm:px-6">
 		<div class="fixed top-32 right-4 z-40">
 				<a
 					on:click|preventDefault={hideMap}
@@ -42,6 +42,6 @@
 				</a>
 		</div>
 
-        <SearchMap {inscriptions} />
+    <SearchMap {inscriptions} />
 	</div>
 </main>

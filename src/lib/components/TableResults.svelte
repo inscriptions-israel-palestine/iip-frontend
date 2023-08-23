@@ -22,7 +22,7 @@
 
 		const edition = editions.find((edition) => edition.edition_type === type);
 
-		return edition?.text || 'Not found';
+		return edition?.text || `[no ${type}]`;
 	}
 
 	function getTranscription(inscription: Inscription) {

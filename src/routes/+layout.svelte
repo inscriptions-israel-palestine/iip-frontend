@@ -35,19 +35,19 @@
 		<div class="absolute right-0 flex space-x-10 pr-4 text-white">
 			<a
 				class="cursor-pointer hover:text-base-300 hover:underline"
-				href="//inscriptionsisraelpalestine.com/about">About</a
+				href="//inscriptionsisraelpalestine.org/about">About</a
 			>
 			<a
 				class="cursor-pointer hover:text-base-300 hover:underline"
-				href="//inscriptionsisraelpalestine.com/about">Stories</a
+				href="//inscriptionsisraelpalestine.org/about">Stories</a
 			>
 			<a
 				class="cursor-pointer hover:text-base-300 hover:underline"
-				href="//inscriptionsisraelpalestine.com/about">Resources</a
+				href="//inscriptionsisraelpalestine.org/about">Resources</a
 			>
 			<a
 				class="cursor-pointer hover:text-base-300 hover:underline"
-				href="//inscriptionsisraelpalestine.com/about">Contact</a
+				href="//inscriptionsisraelpalestine.org/about">Contact</a
 			>
 		</div>
 	</div>

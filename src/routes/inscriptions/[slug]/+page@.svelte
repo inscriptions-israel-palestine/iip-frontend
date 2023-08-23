@@ -1,20 +1,64 @@
 <script lang="ts">
 	import type { Inscription } from '$lib/types/inscription.type';
+
+	import { browser } from '$app/environment';
+	import { onMount } from 'svelte';
+
+	// @ts-expect-error
+	import CETEI from 'CETEIcean';
 	import '../../../app.css';
 	import Maplet from '$lib/components/Maplet.svelte';
+
 	export let data;
 
 	$: inscription = data.inscription;
 
-	function getEdition(inscription: Inscription, editionType: string) {
+	const teiTransformer = new CETEI();
+	const EDITION_TYPES = ['diplomatic', 'transcription', 'transcription_segmented', 'translation'];
+
+	async function getEdition(inscription: Inscription, editionType: string) {
 		const edition = inscription.editions?.find((edition) => edition.edition_type === editionType);
 
-		if (edition && Boolean(edition.text)) {
-			return edition.text;
+		// it might be better just to change how this
+		// editionType is stored in the database, but then
+		// it would be inconsistent with how it's phrased
+		// in the Epidoc XML.
+		if (editionType === 'transcription_segmented') {
+			editionType = 'segmented_transcription';
 		}
 
-		return `No ${editionType.replace('_', '')}`;
+		if (!edition?.text) {
+			return `[no ${editionType.replace('_', ' ')}]`;
+		}
+
+		if (browser) {
+			return transformTei(edition.raw_xml);
+		} else {
+			return edition.text;
+		}
 	}
+
+	function transformTei(raw: string | undefined | null) {
+		if (!raw) {
+			return false;
+		}
+
+		return new Promise((resolve, _reject) =>
+			teiTransformer.makeHTML5(raw, (data: any) => resolve(data))
+		);
+	}
+
+	onMount(async () => {
+		for (let editionType of EDITION_TYPES) {
+			const el = document.getElementById(editionType);
+
+			if (el) {
+				const edition = await getEdition(inscription, editionType);
+				// @ts-expect-error
+				el.replaceChildren(edition);
+			}
+		}
+	});
 </script>
 
 <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
@@ -22,21 +66,28 @@
 		class="mx-auto grid max-w-2xl grid-cols-1 grid-rows-1 items-start gap-x-8 gap-y-8 lg:mx-0 lg:max-w-none lg:grid-cols-3"
 	>
 		<!-- Maplet -->
-		<div class="lg:col-start-3 lg:row-end-1">
-			<h2 class="sr-only">Location</h2>
-			<div
-				class="rounded-lg bg-gray-50 shadow-sm ring-1 ring-gray-900/5 min-h-64 min-w-64 h-64 min-w-64 w-full"
-			>
-				<Maplet {inscription} />
+		{#if inscription.location_coordinates}
+			<div class="lg:col-start-3 lg:row-end-1">
+				<h2 class="sr-only">Location</h2>
+				<div
+					class="rounded-lg bg-gray-50 shadow-sm ring-1 ring-gray-900/5 min-h-64 min-w-64 h-64 min-w-64 w-full"
+				>
+					<Maplet {inscription} />
+				</div>
 			</div>
-		</div>
+		{/if}
 
 		<div
 			class="-mx-4 px-4 py-8 shadow-sm ring-1 ring-gray-900/5 sm:mx-0 sm:rounded-lg sm:px-8 sm:pb-14 lg:col-span-2 lg:row-span-2 lg:row-end-2 xl:px-16 xl:pb-20 xl:pt-16"
 		>
 			<h2 class="font-semibold leading-6 prose prose-h2 prose-stone prose-2xl">
-				{inscription.title || inscription.filename}
+				{inscription.filename.replace('.xml', '').toUpperCase()}
 			</h2>
+			{#if inscription.title}
+				<h3 class="font-semibold leading-6 prose prose-h3 prose-stone prose-xl">
+					{inscription.title}
+				</h3>
+			{/if}
 			<dl class="mt-6 grid grid-cols-1 text-sm leading-6 sm:grid-cols-2">
 				<div class="sm:pr-4">
 					<dt class="inline prose prose-stone">Terminus post quem</dt>
@@ -76,7 +127,7 @@
 											>
 												<img
 													class="w-full object-contain"
-													style="max-height:66vh"
+													style="max-height:30vh"
 													src={image.graphic_url}
 													alt={image.description}
 													title="Click to view"
@@ -115,32 +166,38 @@
 					<tr class="border-b border-gray-100">
 						<td class="max-w-0 px-0 py-5 align-top font-medium prose prose-stone">
 							<div class="font-medium prose prose-stone">Diplomatic</div>
-							<p class="prose prose-p prose-stone font-normal">
-								{getEdition(inscription, 'diplomatic')}
+							<p id="diplomatic" class="prose prose-p prose-stone font-normal whitespace-pre-line">
+								Processing diplomatic &hellip;
 							</p>
 						</td>
 					</tr>
 					<tr class="border-b border-gray-100">
 						<td class="max-w-0 px-0 py-5 align-top font-medium prose prose-stone">
 							<div class="font-medium prose prose-stone">Transcription</div>
-							<p class="prose prose-p prose-stone font-normal">
-								{getEdition(inscription, 'transcription')}
+							<p
+								id="transcription"
+								class="prose prose-p prose-stone whitespace-pre-line font-normal"
+							>
+								Processing transcription &hellip;
 							</p>
 						</td>
 					</tr>
 					<tr class="border-b border-gray-100">
 						<td class="max-w-0 px-0 py-5 align-top font-medium prose prose-stone">
 							<div class="font-medium prose prose-stone">Segmented transcription</div>
-							<p class="prose prose-p prose-stone font-normal">
-								{getEdition(inscription, 'transcription_segmented')}
+							<p
+								id="transcription_segmented"
+								class="prose prose-p prose-stone font-normal whitespace-pre-line"
+							>
+								Processing segmented transcription &hellip;
 							</p>
 						</td>
 					</tr>
 					<tr class="border-b border-gray-100">
 						<td class="max-w-0 px-0 py-5 align-top font-medium prose prose-stone">
 							<div class="font-medium prose prose-stone">Translation</div>
-							<p class="prose prose-p prose-stone font-normal">
-								{getEdition(inscription, 'translation')}
+							<p id="translation" class="prose prose-p prose-stone font-normal whitespace-pre-line">
+								Processing translation &hellip;
 							</p>
 						</td>
 					</tr>
@@ -213,24 +270,19 @@
 					holder, noted in the illustration credit.
 				</p>
 
-				<p class="prose prose-p prose-stone">
-					The project can be cited as:
-				</p>
+				<p class="prose prose-p prose-stone">The project can be cited as:</p>
 
 				<cite class="prose prose-p prose-stone">
-					Satlow, Michael L., ed. 2002 - . “Inscriptions of
-					Israel/Palestine.” Brown University. <a href="https://doi.org/10.26300/PZ1D-ST89"
-						>https://doi.org/10.26300/PZ1D-ST89</a
+					Satlow, Michael L., ed. 2002 - . “Inscriptions of Israel/Palestine.” Brown University. <a
+						href="https://doi.org/10.26300/PZ1D-ST89">https://doi.org/10.26300/PZ1D-ST89</a
 					>
 				</cite>
 
-				<p class="prose prose-p prose-stone">
-					This inscription can be cited as:
-				</p>
+				<p class="prose prose-p prose-stone">This inscription can be cited as:</p>
 
 				<cite class="prose prose-p prose-stone">
-					"Inscriptions of Israel/Palestine," [inscription
-					id],[today's date]. https:doi.org/10.26300/pz1d-st89
+					"Inscriptions of Israel/Palestine," [inscription id],[today's date].
+					https:doi.org/10.26300/pz1d-st89
 				</cite>
 			</div>
 		</div>
