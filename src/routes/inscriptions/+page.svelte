@@ -6,7 +6,11 @@
 	export let data;
 
 	function showMap(_e: Event) {
-		goto(`/inscriptions/map${$page.url.search}`);
+		const searchParams = $page.url.searchParams;
+
+		searchParams.delete('page');
+
+		goto(`/inscriptions/map?${searchParams.toString()}`);
 	}
 
 	$: inscriptions = data.inscriptions;
