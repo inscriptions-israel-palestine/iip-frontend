@@ -1,18 +1,9 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import TableResults from '$lib/components/TableResults.svelte';
 
 	export let data;
-
-	function showMap(_e: Event) {
-		const searchParams = $page.url.searchParams;
-
-		searchParams.delete('page');
-
-		goto(`/inscriptions/map?${searchParams.toString()}`);
-	}
-
+	
 	$: inscriptions = data.inscriptions;
 </script>
 
@@ -20,8 +11,7 @@
 	<div class="px-4 sm:px-6 lg:px-8">
 		<div class="fixed top-32 right-4 z-40">
 			<a
-				on:click|preventDefault={showMap}
-				href="#map=true"
+				href={`/inscriptions/map${$page.url.search}`}
 				class="relative bg-stone-200 inline-flex h-12 w-12 flex-shrink-0 cursor-pointer rounded-md border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-stone-600"
 			>
 				<span

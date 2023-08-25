@@ -35,9 +35,11 @@
 	}
 
 	function pageHref(n: number) {
-		$page.url.searchParams.set('page', n.toString());
+		const searchParams = new URLSearchParams($page.url.search);
+		
+		searchParams.set('page', n.toString());
 
-		return $page.url.toString();
+		return `${$page.url.pathname}?${searchParams.toString()}`;
 	}
 
 	function parseDate(s: string | undefined) {
