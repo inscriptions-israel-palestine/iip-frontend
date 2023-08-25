@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Edition, Inscription } from '$lib/types/inscription.type';
+	
 	import { page } from '$app/stores';
 	import SearchResultImage from './SearchResultImage.svelte';
 

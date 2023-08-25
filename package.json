@@ -41,6 +41,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@auth0/auth0-spa-js": "^2.1.2",
 		"CETEIcean": "^1.8.0",
 		"leaflet": "^1.9.4",
 		"leaflet.markercluster": "^1.5.3",
