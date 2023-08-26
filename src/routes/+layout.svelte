@@ -5,11 +5,13 @@
 <div class="min-h-full">
 	<div class="top-0 z-50 flex h-24 min-w-full shrink-0 items-center bg-primary">
 		<div class="flex h-24 shrink-0 items-center p-4">
-			<img
-				class="h-16 w-auto"
-				src="/img/iip_logo.jpg"
-				alt="Inscriptions from Israel and Palestine"
-			/>
+			<a href="/">
+				<img
+					class="h-16 w-auto"
+					src="/img/iip_logo.jpg"
+					alt="Inscriptions from Israel and Palestine"
+				/>
+			</a>
 		</div>
 		<button type="button" class="-m-2.5 p-2.5 text-gray-700 lg:hidden">
 			<span class="sr-only">Open sidebar</span>

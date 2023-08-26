@@ -40,6 +40,10 @@ COPY --from=build /app /app
 
 ENV PUBLIC_API_URL=$PUBLIC_API_URL
 ENV PUBLIC_MAPBOX_ACCESS_TOKEN=$PUBLIC_MAPBOX_ACCESS_TOKEN
+ENV PUBLIC_AUTH0_AUDIENCE="search.inscriptionsisraelpalestine.org"
+ENV PUBLIC_AUTH0_CALLBACK_URL="http://localhost:5173/inscriptions"
+ENV PUBLIC_AUTH0_CLIENT_ID="od7TXKfYe0yt8hhdSF1dNR7HJRGkWv7n"
+ENV PUBLIC_AUTH0_DOMAIN="dev-fo7f10zt.auth0.com"
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE 3000

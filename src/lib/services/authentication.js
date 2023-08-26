@@ -1,24 +1,27 @@
 // @ts-check
 
 import { Auth0Client } from '@auth0/auth0-spa-js';
-import {
-	PUBLIC_AUTH0_CLIENT_ID,
-	PUBLIC_AUTH0_DOMAIN
-} from '$env/static/public';
+import { env } from '$env/dynamic/public';
 import { writable } from 'svelte/store';
 
 export const isAuthenticated = writable(false);
 export const user = writable();
 export const token = writable();
 
+function redirectUrl() {
+	return `${window.location.protocol}//${window.location.hostname}:${window.location.port}/inscriptions`;
+}
+
 export async function createAuth0Client() {
 	const client = new Auth0Client({
 		authorizationParams: {
-			redirect_uri: 'http://localhost:5173/inscriptions',
+			audience: env.PUBLIC_AUTH0_AUDIENCE,
+			redirect_uri: redirectUrl(),
+			scope: 'inscriptions:all'
 		},
 		cacheLocation: 'localstorage',
-		clientId: PUBLIC_AUTH0_CLIENT_ID,
-		domain: PUBLIC_AUTH0_DOMAIN,
+		clientId: env.PUBLIC_AUTH0_CLIENT_ID,
+		domain: env.PUBLIC_AUTH0_DOMAIN
 	});
 
 	try {
@@ -44,5 +47,9 @@ export async function logIn(client) {
 }
 
 export function logOut(client) {
-	return client.logout();
+	return client.logout({
+		logoutParams: {
+			returnTo: redirectUrl()
+		}
+	});
 }

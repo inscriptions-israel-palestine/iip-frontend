@@ -8,6 +8,12 @@ export type BibliographicEntry = {
     xml_id: string;
 }
 
+export enum DisplayStatus {
+    APPROVED = "approved",
+    TO_CORRECT = "to correct",
+    TO_APPROVE = "to approve"
+}
+
 export enum EditionType {
     DIPLOMATIC = "diplomatic",
     TRANSCRIPTION = "transcription",
@@ -48,6 +54,7 @@ export type Inscription = {
     city: any;
     description?: string;
     dimensions?: any;
+    display_status: DisplayStatus;
     editions?: Edition[];
     figures: Figure[];
     filename: string;

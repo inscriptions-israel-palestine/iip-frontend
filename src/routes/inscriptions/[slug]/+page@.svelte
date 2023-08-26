@@ -1,8 +1,12 @@
 <script lang="ts">
-	import type { Inscription } from '$lib/types/inscription.type';
+	import type { Auth0Client } from '@auth0/auth0-spa-js';
+	import type { DisplayStatus, Inscription } from '$lib/types/inscription.type';
+
+	import { createAuth0Client } from '$lib/services/authentication';
 
 	import { browser } from '$app/environment';
-	import { onMount } from 'svelte';
+	import { beforeUpdate, onMount } from 'svelte';
+	import { page } from '$app/stores';
 
 	// @ts-expect-error
 	import CETEI from 'CETEIcean';
@@ -11,10 +15,31 @@
 
 	export let data;
 
+	let client: Auth0Client;
+	let token: string;
+	let displayStatus: DisplayStatus;
+
 	$: inscription = data.inscription;
 
 	const teiTransformer = new CETEI();
 	const EDITION_TYPES = ['diplomatic', 'transcription', 'transcription_segmented', 'translation'];
+
+	function changeDisplayStatus(e: Event) {
+		const target = e.target as HTMLSelectElement;
+
+		displayStatus = target.value as DisplayStatus;
+
+		fetch($page.url.toString(), {
+			method: 'PATCH',
+			headers: {
+				Authorization: `Bearer ${token}`,
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				display_status: displayStatus
+			})
+		});
+	}
 
 	async function getEdition(inscription: Inscription, editionType: string) {
 		const edition = inscription.editions?.find((edition) => edition.edition_type === editionType);
@@ -47,6 +72,16 @@
 			teiTransformer.makeHTML5(raw, (data: any) => resolve(data))
 		);
 	}
+
+	beforeUpdate(async () => {
+		client = await createAuth0Client();
+
+		try {
+			token = await client.getTokenSilently()
+		} catch (e) {
+			console.error(e);
+		}
+	});
 
 	onMount(async () => {
 		for (let editionType of EDITION_TYPES) {
@@ -88,6 +123,19 @@
 					{inscription.title}
 				</h3>
 			{/if}
+			{#if token}
+				<form action={`/inscriptions/${inscription.filename.replace('.xml', '')}`} method="patch">
+					<select
+						class="select select-bordered"
+						bind:value={inscription.display_status}
+						on:change={changeDisplayStatus}
+					>
+						<option value="to approve">To approve</option>
+						<option value="to correct">To correct</option>
+						<option value="approved">Approved</option>
+					</select>
+				</form>
+			{/if}
 			<dl class="mt-6 grid grid-cols-1 text-sm leading-6 sm:grid-cols-2">
 				<div class="sm:pr-4">
 					<dt class="inline prose prose-stone">Terminus post quem</dt>
@@ -126,8 +174,7 @@
 												title={image.description || 'An image of the inscription.'}
 											>
 												<img
-													class="w-full object-contain"
-													style="max-height:30vh"
+													class="object-contain h-72"
 													src={image.graphic_url}
 													alt={image.description}
 													title="Click to view"

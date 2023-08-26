@@ -43,11 +43,16 @@
 	}
 
 	function parseDate(s: string | undefined) {
-		if (s === undefined) {
+		if (s === undefined || s === null) {
 			return 'Unknown';
 		}
 
 		const n = parseInt(s, 10);
+
+		if (isNaN(n)) {
+			console.warn(`Got an invalid date: ${s}.`)
+			return 'Unknown';
+		}
 
 		if (n < 0) {
 			return `${Math.abs(n)} BCE`;
