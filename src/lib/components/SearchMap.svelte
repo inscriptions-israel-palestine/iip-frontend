@@ -89,7 +89,7 @@
 				//   * Blue, 20px circles when point count is less than 100
 				//   * Yellow, 30px circles when point count is between 100 and 750
 				//   * Pink, 40px circles when point count is greater than or equal to 750
-				'circle-color': ['step', ['get', 'point_count'], '#51bbd6', 100, '#f1f075', 750, '#f28cb1'],
+				'circle-color': ['step', ['get', 'point_count'], '#ebb297', 100, '#e28d66', 750, '#d15e28'],
 				'circle-radius': ['step', ['get', 'point_count'], 20, 100, 30, 750, 40]
 			}
 		});
@@ -112,7 +112,7 @@
 			source: SOURCE_NAME,
 			filter: ['!', ['has', 'point_count']],
 			paint: {
-				'circle-color': '#11b4da',
+				'circle-color': '#289bd1',
 				'circle-radius': 8,
 				'circle-stroke-width': 1,
 				'circle-stroke-color': '#fff'
