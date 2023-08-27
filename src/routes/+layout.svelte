@@ -41,15 +41,15 @@
 			>
 			<a
 				class="cursor-pointer hover:text-base-300 hover:underline"
-				href="//inscriptionsisraelpalestine.org/about">Stories</a
+				href="//inscriptionsisraelpalestine.org/story">Stories</a
 			>
 			<a
 				class="cursor-pointer hover:text-base-300 hover:underline"
-				href="//inscriptionsisraelpalestine.org/about">Resources</a
+				href="//inscriptionsisraelpalestine.org/resources-2">Resources</a
 			>
 			<a
 				class="cursor-pointer hover:text-base-300 hover:underline"
-				href="//inscriptionsisraelpalestine.org/about">Contact</a
+				href="//inscriptionsisraelpalestine.org/contact">Contact</a
 			>
 		</div>
 	</div>

@@ -22,7 +22,7 @@
 	$: inscription = data.inscription;
 
 	const teiTransformer = new CETEI();
-	const EDITION_TYPES = ['diplomatic', 'transcription', 'transcription_segmented', 'translation'];
+	const EDITION_TYPES = ['diplomatic', 'transcription', 'translation'];
 
 	function changeDisplayStatus(e: Event) {
 		const target = e.target as HTMLSelectElement;
@@ -96,6 +96,10 @@
 	});
 </script>
 
+<svelte:head>
+	<title>{`${inscription.filename.replace('.xml', '').toUpperCase()} - Inscriptions of Israel/Palestine`}</title>
+</svelte:head>
+
 <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
 	<div
 		class="mx-auto grid max-w-2xl grid-cols-1 grid-rows-1 items-start gap-x-8 gap-y-8 lg:mx-0 lg:max-w-none lg:grid-cols-3"
@@ -136,6 +140,45 @@
 					</select>
 				</form>
 			{/if}
+			<table class="mt-16 w-full whitespace-nowrap text-left prose prose-sm leading-6">
+				<colgroup>
+					<col class="w-full" />
+				</colgroup>
+				<thead class="border-b border-gray-200 prose prose-stone">
+					<tr>
+						<th scope="col" class="px-0 py-3 font-semibold" />
+					</tr>
+				</thead>
+				<tbody>
+					<tr class="border-b border-gray-100">
+						<td class="max-w-0 px-0 py-5 align-top font-medium prose prose-stone">
+							<div class="font-medium prose prose-stone">Transcription</div>
+							<p
+								id="transcription"
+								class="prose prose-p prose-stone font-normal transcription"
+							>
+								Processing transcription &hellip;
+							</p>
+						</td>
+					</tr>
+					<tr class="border-b border-gray-100">
+						<td class="max-w-0 px-0 py-5 align-top font-medium prose prose-stone">
+							<div class="font-medium prose prose-stone">Translation</div>
+							<p id="translation" class="prose prose-p prose-stone font-normal translation">
+								Processing translation &hellip;
+							</p>
+						</td>
+					</tr>
+					<tr class="border-b border-gray-100">
+						<td class="max-w-0 px-0 py-5 align-top font-medium prose prose-stone">
+							<div class="font-medium prose prose-stone">Diplomatic</div>
+							<p id="diplomatic" class="prose prose-p prose-stone font-normal diplomatic">
+								Processing diplomatic &hellip;
+							</p>
+						</td>
+					</tr>
+				</tbody>
+			</table>
 			<dl class="mt-6 grid grid-cols-1 text-sm leading-6 sm:grid-cols-2">
 				<div class="sm:pr-4">
 					<dt class="inline prose prose-stone">Terminus post quem</dt>
@@ -199,57 +242,6 @@
 					</dd>
 				</div>
 			</dl>
-
-			<table class="mt-16 w-full whitespace-nowrap text-left prose prose-sm leading-6">
-				<colgroup>
-					<col class="w-full" />
-				</colgroup>
-				<thead class="border-b border-gray-200 prose prose-stone">
-					<tr>
-						<th scope="col" class="px-0 py-3 font-semibold" />
-					</tr>
-				</thead>
-				<tbody>
-					<tr class="border-b border-gray-100">
-						<td class="max-w-0 px-0 py-5 align-top font-medium prose prose-stone">
-							<div class="font-medium prose prose-stone">Diplomatic</div>
-							<p id="diplomatic" class="prose prose-p prose-stone font-normal whitespace-pre-line">
-								Processing diplomatic &hellip;
-							</p>
-						</td>
-					</tr>
-					<tr class="border-b border-gray-100">
-						<td class="max-w-0 px-0 py-5 align-top font-medium prose prose-stone">
-							<div class="font-medium prose prose-stone">Transcription</div>
-							<p
-								id="transcription"
-								class="prose prose-p prose-stone whitespace-pre-line font-normal"
-							>
-								Processing transcription &hellip;
-							</p>
-						</td>
-					</tr>
-					<tr class="border-b border-gray-100">
-						<td class="max-w-0 px-0 py-5 align-top font-medium prose prose-stone">
-							<div class="font-medium prose prose-stone">Segmented transcription</div>
-							<p
-								id="transcription_segmented"
-								class="prose prose-p prose-stone font-normal whitespace-pre-line"
-							>
-								Processing segmented transcription &hellip;
-							</p>
-						</td>
-					</tr>
-					<tr class="border-b border-gray-100">
-						<td class="max-w-0 px-0 py-5 align-top font-medium prose prose-stone">
-							<div class="font-medium prose prose-stone">Translation</div>
-							<p id="translation" class="prose prose-p prose-stone font-normal whitespace-pre-line">
-								Processing translation &hellip;
-							</p>
-						</td>
-					</tr>
-				</tbody>
-			</table>
 		</div>
 
 		<div class="lg:col-start-3">
