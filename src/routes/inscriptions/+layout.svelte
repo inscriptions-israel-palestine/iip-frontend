@@ -17,7 +17,6 @@
 	$: notBefore = searchParams.get('not_before');
 	$: notBeforeEra = searchParams.get('not_before_era') || 'bce';
 	$: physicalTypes = searchParams.getAll('physical_types');
-	$: provenances = searchParams.getAll('provenances');
 	$: regions = searchParams.getAll('regions');
 	$: religions = searchParams.getAll('religions');
 	$: textSearch = searchParams.get('text_search');
@@ -34,7 +33,6 @@
 		notBefore = null;
 		notBeforeEra = 'bce';
 		physicalTypes = [];
-		provenances = [];
 		regions = [];
 		religions = [];
 		textSearch = '';
@@ -187,7 +185,7 @@
 
 						<div
 							class={`font-small collapse collapse-arrow ${
-								cities.length > 0 || provenances.length > 0 ? 'collapse-open' : ''
+								cities.length > 0 ? 'collapse-open' : ''
 							}`}
 						>
 							<input type="checkbox" />
@@ -197,45 +195,28 @@
 									<h2 class="mb-2 font-semibold">City</h2>
 									<div class="h-48 overflow-y-auto">
 										{#each facets.cities as city}
-											<div class="form-control">
-												<label class="label justify-start">
-													<input
-														class="checkbox rounded-none h-4 w-4"
-														id={`city-${city.id}`}
-														type="checkbox"
-														name="cities"
-														value={city.id.toString()}
-														bind:group={cities}
-													/>
-													<span class="label-text ml-4">{city.placename}</span>
-													<a
-														class="cursor-pointer ml-4 text-stone-400 text-sm hover:underline"
-														target="_blank"
-														href={city.pleiades_ref}>More info</a
-													>
-												</label>
-											</div>
-										{/each}
-									</div>
-								</div>
-
-								<div class="border border-stone-300 p-4 rounded mb-2">
-									<h2 class="mb-2 font-semibold">Provenance</h2>
-									<div class="h-48 overflow-y-auto">
-										{#each facets.provenances as provenance}
-											<div class="form-control">
-												<label class="label justify-start">
-													<input
-														class="checkbox rounded-none h-4 w-4"
-														id={`provenance-${provenance.id}`}
-														type="checkbox"
-														name="provenances"
-														value={provenance.id.toString()}
-														bind:group={provenances}
-													/>
-													<span class="label-text ml-4">{provenance.placename}</span>
-												</label>
-											</div>
+											{#if city.placename.trim() !== ""}
+												<div class="form-control">
+													<label class="label justify-start">
+														<input
+															class="checkbox rounded-none h-4 w-4"
+															id={`city-${city.id}`}
+															type="checkbox"
+															name="cities"
+															value={city.id.toString()}
+															bind:group={cities}
+														/>
+														<span class="label-text ml-4">{city.placename}</span>
+														{#if city.pleiades_ref}
+															<a
+																class="cursor-pointer ml-4 text-stone-400 text-sm hover:underline"
+																target="_blank"
+																href={city.pleiades_ref}>More info</a
+															>
+														{/if}
+													</label>
+												</div>
+											{/if}
 										{/each}
 									</div>
 								</div>
