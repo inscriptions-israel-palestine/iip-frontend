@@ -181,6 +181,7 @@
 								</div>
 							</div>
 						</div>
+						
 						<div class="divider" />
 
 						<div
@@ -220,32 +221,11 @@
 										{/each}
 									</div>
 								</div>
-
-								{#if facets.regions && facets.regions.length > 0}
-									<div class="border border-stone-300 p-4 rounded">
-										<h2 class="mb-2 font-semibold">Region</h2>
-										<div class="h-48 overflow-y-auto">
-											{#each facets.regions as region}
-												<div class="form-control">
-													<label class="label justify-start">
-														<input
-															class="checkbox rounded-none h-4 w-4"
-															id={`region-${region.id}`}
-															type="checkbox"
-															name="regions"
-															value={region.id.toString()}
-															bind:group={regions}
-														/>
-														<span class="label-text ml-4">{region.placename}</span>
-													</label>
-												</div>
-											{/each}
-										</div>
-									</div>
-								{/if}
 							</div>
 						</div>
+
 						<div class="divider" />
+						
 						<div
 							class={`font-small collapse collapse-arrow ${
 								genres.length > 0 ? 'collapse-open' : ''
@@ -273,6 +253,7 @@
 								</div>
 							</div>
 						</div>
+						
 						<div class="divider" />
 
 						<div
@@ -304,6 +285,7 @@
 								</div>
 							</div>
 						</div>
+						
 						<div class="divider" />
 
 						<div
@@ -333,6 +315,7 @@
 								</div>
 							</div>
 						</div>
+						
 						<div class="divider" />
 
 						<div
@@ -364,6 +347,7 @@
 								</div>
 							</div>
 						</div>
+						
 						<div class="divider" />
 
 						<div
