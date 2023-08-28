@@ -10,7 +10,7 @@
 	import '../../../app.css';
 	import Maplet from '$lib/components/Maplet.svelte';
 	import RenderedEdition from '$lib/components/RenderedEdition.svelte';
-	import BibliographicEntry from '$lib/components/BibliographicEntry.svelte';
+	import ZoteroItem from '$lib/components/ZoteroItem.svelte';
 
 	export let data;
 
@@ -28,6 +28,7 @@
 	$: diplomatic = inscription.editions?.find(
 		(edition: Edition) => edition.edition_type === 'diplomatic'
 	);
+	$: zoteroItems = data.zoteroItems || [];
 
 	function changeDisplayStatus(e: Event) {
 		const target = e.target as HTMLSelectElement;
@@ -260,11 +261,11 @@
 			</div>
 			<div class="py-3">
 				<h2 class="font-semibold leading-6 prose prose-stone prose-h2 mb-3">Bibliography</h2>
-				{#if inscription.bibliographic_entries.length > 0}
+				{#if zoteroItems.length > 0}
 					<ul role="list">
-						{#each inscription.bibliographic_entries as bib}
-							<li class="relative flex gap-x-4">
-								<BibliographicEntry entry={bib} />
+						{#each zoteroItems as item}
+							<li class="relative flex gap-x-4 pb-4">
+								<ZoteroItem item={item} />
 							</li>
 						{/each}
 					</ul>
