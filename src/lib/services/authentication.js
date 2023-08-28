@@ -9,7 +9,8 @@ export const user = writable();
 export const token = writable();
 
 function redirectUrl() {
-	return `${window.location.protocol}//${window.location.hostname}:${window.location.port}/inscriptions`;
+	const port = window.location.port ? `:${window.location.port}` : '';
+	return `${window.location.protocol}//${window.location.hostname}${port}/inscriptions`;
 }
 
 export async function createAuth0Client() {
