@@ -10,6 +10,7 @@
 	import '../../../app.css';
 	import Maplet from '$lib/components/Maplet.svelte';
 	import RenderedEdition from '$lib/components/RenderedEdition.svelte';
+	import BibliographicEntry from '$lib/components/BibliographicEntry.svelte';
 
 	export let data;
 
@@ -18,13 +19,15 @@
 	let displayStatus: DisplayStatus;
 
 	$: inscription = data.inscription;
-	$: transcription = inscription.editions?.find((edition: Edition) => edition.edition_type === 'transcription');
-	$: translation = inscription.editions?.find((edition: Edition) => edition.edition_type === 'translation');
-	$: diplomatic = inscription.editions?.find((edition: Edition) => edition.edition_type === 'diplomatic');
-
-	function getEditionOfType(editions: Edition[], editionType: string) {
-		return editions.find(edition => edition.edition_type === editionType);
-	}
+	$: transcription = inscription.editions?.find(
+		(edition: Edition) => edition.edition_type === 'transcription'
+	);
+	$: translation = inscription.editions?.find(
+		(edition: Edition) => edition.edition_type === 'translation'
+	);
+	$: diplomatic = inscription.editions?.find(
+		(edition: Edition) => edition.edition_type === 'diplomatic'
+	);
 
 	function changeDisplayStatus(e: Event) {
 		const target = e.target as HTMLSelectElement;
@@ -43,11 +46,15 @@
 		});
 	}
 
+	function getTodayString() {
+		return new Date().toLocaleDateString(['en-GB', 'en-US'], { day: 'numeric', month: 'long', year: 'numeric' });
+	}
+
 	beforeUpdate(async () => {
 		client = await createAuth0Client();
 
 		try {
-			token = await client.getTokenSilently()
+			token = await client.getTokenSilently();
 		} catch (e) {
 			console.error(e);
 		}
@@ -55,7 +62,11 @@
 </script>
 
 <svelte:head>
-	<title>{`${inscription.filename.replace('.xml', '').toUpperCase()} - Inscriptions of Israel/Palestine`}</title>
+	<title
+		>{`${inscription.filename
+			.replace('.xml', '')
+			.toUpperCase()} - Inscriptions of Israel/Palestine`}</title
+	>
 </svelte:head>
 
 <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
@@ -86,7 +97,11 @@
 				</h3>
 			{/if}
 			{#if token}
-				<form action={`/inscriptions/${inscription.filename.replace('.xml', '')}`} method="patch" class="mt-4">
+				<form
+					action={`/inscriptions/${inscription.filename.replace('.xml', '')}`}
+					method="patch"
+					class="mt-4"
+				>
 					<select
 						class="select select-bordered"
 						bind:value={inscription.display_status}
@@ -111,10 +126,7 @@
 					<tr class="border-b border-gray-100">
 						<td class="max-w-0 px-0 py-5 align-top font-medium prose prose-stone whitespace-normal">
 							<div class="font-medium prose prose-stone">Transcription</div>
-							<p
-								id="transcription"
-								class="prose prose-p prose-stone font-normal transcription"
-							>
+							<p id="transcription" class="prose prose-p prose-stone font-normal transcription">
 								{#if transcription}
 									<RenderedEdition edition={transcription} />
 								{:else}
@@ -252,11 +264,7 @@
 					<ul role="list">
 						{#each inscription.bibliographic_entries as bib}
 							<li class="relative flex gap-x-4">
-								<p class="flex-auto text-xs prose prose-stone prose-p">
-									<span class="font-medium prose prose-stone">{bib.ptr_target}</span>
-									{bib.bibl_scope_unit}
-									{bib.bibl_scope}
-								</p>
+								<BibliographicEntry entry={bib} />
 							</li>
 						{/each}
 					</ul>
@@ -290,7 +298,7 @@
 				<p class="prose prose-p prose-stone">This inscription can be cited as:</p>
 
 				<cite class="prose prose-p prose-stone">
-					"Inscriptions of Israel/Palestine," [inscription id],[today's date].
+					"Inscriptions of Israel/Palestine," {inscription.filename.replace('.xml', '').toUpperCase()}, {getTodayString()}.
 					https:doi.org/10.26300/pz1d-st89
 				</cite>
 			</div>
