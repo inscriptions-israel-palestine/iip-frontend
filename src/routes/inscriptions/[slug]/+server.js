@@ -1,10 +1,15 @@
 import { env } from '$env/dynamic/public';
 
 export async function PATCH({ request, params }) {
+	const headers = new Headers();
+
+	headers.append('Authorization', request.headers.get('Authorization'));
+	headers.append('Content-Type', request.headers.get('Content-Type'));
+	
 	const response = await fetch(`${env.PUBLIC_API_URL}/inscriptions/${params.slug}`, {
 		method: 'PATCH',
 		duplex: 'half',
-		headers: request.headers,
+		headers,
 		body: request.body
 	});
 

@@ -46,5 +46,4 @@ ENV PUBLIC_AUTH0_CLIENT_ID="od7TXKfYe0yt8hhdSF1dNR7HJRGkWv7n"
 ENV PUBLIC_AUTH0_DOMAIN="dev-fo7f10zt.auth0.com"
 
 # Start the server by default, this can be overwritten at runtime
-EXPOSE 3000
 CMD [ "node", "build/index.js" ]
