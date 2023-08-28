@@ -4,12 +4,12 @@
 
 	import { createAuth0Client } from '$lib/services/authentication';
 
-	import { beforeUpdate, onMount } from 'svelte';
+	import { beforeUpdate } from 'svelte';
 	import { page } from '$app/stores';
-	import { getEdition, transformTei } from '$lib/services/tei';
 
 	import '../../../app.css';
 	import Maplet from '$lib/components/Maplet.svelte';
+	import RenderedEdition from '$lib/components/RenderedEdition.svelte';
 
 	export let data;
 
@@ -18,8 +18,13 @@
 	let displayStatus: DisplayStatus;
 
 	$: inscription = data.inscription;
+	$: transcription = inscription.editions?.find((edition: Edition) => edition.edition_type === 'transcription');
+	$: translation = inscription.editions?.find((edition: Edition) => edition.edition_type === 'translation');
+	$: diplomatic = inscription.editions?.find((edition: Edition) => edition.edition_type === 'diplomatic');
 
-	const EDITION_TYPES = ['diplomatic', 'transcription', 'translation'];
+	function getEditionOfType(editions: Edition[], editionType: string) {
+		return editions.find(edition => edition.edition_type === editionType);
+	}
 
 	function changeDisplayStatus(e: Event) {
 		const target = e.target as HTMLSelectElement;
@@ -45,21 +50,6 @@
 			token = await client.getTokenSilently()
 		} catch (e) {
 			console.error(e);
-		}
-	});
-
-	onMount(async () => {
-		for (let editionType of EDITION_TYPES) {
-			const el = document.getElementById(editionType);
-
-			if (el) {
-				const edition = getEdition(inscription.editions, editionType);
-
-				transformTei((edition as Edition).raw_xml).then(html => {
-					// @ts-expect-error
-					el.replaceChildren(html);
-				});
-			}
 		}
 	});
 </script>
@@ -125,7 +115,11 @@
 								id="transcription"
 								class="prose prose-p prose-stone font-normal transcription"
 							>
-								{getEdition(inscription.editions, 'transcription').text}
+								{#if transcription}
+									<RenderedEdition edition={transcription} />
+								{:else}
+									[no transcription]
+								{/if}
 							</p>
 						</td>
 					</tr>
@@ -133,7 +127,11 @@
 						<td class="max-w-0 px-0 py-5 align-top font-medium prose prose-stone whitespace-normal">
 							<div class="font-medium prose prose-stone">Translation</div>
 							<p id="translation" class="prose prose-p prose-stone font-normal translation">
-								{getEdition(inscription.editions, 'translation').text}
+								{#if translation}
+									<RenderedEdition edition={translation} />
+								{:else}
+									[no translation]
+								{/if}
 							</p>
 						</td>
 					</tr>
@@ -141,7 +139,11 @@
 						<td class="max-w-0 px-0 py-5 align-top font-medium prose prose-stone">
 							<div class="font-medium prose prose-stone">Diplomatic</div>
 							<p id="diplomatic" class="prose prose-p prose-stone font-normal diplomatic">
-								{getEdition(inscription.editions, 'diplomatic').text}
+								{#if diplomatic}
+									<RenderedEdition edition={diplomatic} />
+								{:else}
+									[no diplomatic]
+								{/if}
 							</p>
 						</td>
 					</tr>

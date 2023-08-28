@@ -1,47 +1,12 @@
 <script lang="ts">
-	import type { Edition, Inscription } from '$lib/types/inscription.type';
+	import type { Inscription } from '$lib/types/inscription.type';
 
-	import { browser } from '$app/environment';
 	import { page } from '$app/stores';
-	import { getEdition, transformTei } from '$lib/services/tei';
-	import SearchResultImage from './SearchResultImage.svelte';
+	import TableResultRow from './TableResultRow.svelte';
 
 	export let inscriptions: Inscription[] = [];
 	export let currentPage: number = 1;
 	export let totalPages: number = 1;
-
-	function formatDate(inscription: Inscription) {
-		if (inscription.not_before === inscription.not_after) {
-			return parseDate(inscription.not_before);
-		}
-
-		return `Between ${parseDate(inscription.not_before)} and ${parseDate(inscription.not_after)}`;
-	}
-
-	function getEditionOfType(inscription: Inscription, type: string) {
-		const edition = getEdition(inscription.editions, type);
-
-		if (browser) {
-			const el = document.getElementById(`${type}-${inscription.id}`);
-
-			if (el) {
-				transformTei((edition as Edition).raw_xml).then(html => {
-					// @ts-expect-error
-					el.replaceChildren(html);
-				});
-			}
-		}
-
-		return edition.text;
-	}
-
-	function getTranscription(inscription: Inscription) {
-		return getEditionOfType(inscription, 'transcription');
-	}
-
-	function getTranslation(inscription: Inscription) {
-		return getEditionOfType(inscription, 'translation');
-	}
 
 	function pageHref(n: number) {
 		const searchParams = new URLSearchParams($page.url.search);
@@ -49,25 +14,6 @@
 		searchParams.set('page', n.toString());
 
 		return `${$page.url.pathname}?${searchParams.toString()}`;
-	}
-
-	function parseDate(s: string | undefined) {
-		if (s === undefined || s === null) {
-			return 'Unknown';
-		}
-
-		const n = parseInt(s, 10);
-
-		if (isNaN(n)) {
-			console.warn(`Got an invalid date: ${s}.`);
-			return 'Unknown';
-		}
-
-		if (n < 0) {
-			return `${Math.abs(n)} BCE`;
-		}
-
-		return `${n} CE`;
 	}
 </script>
 
@@ -86,26 +32,7 @@
 		<tbody>
 			{#if inscriptions && inscriptions.length > 0}
 				{#each inscriptions as inscription (inscription.id)}
-					<tr>
-						<td class="w-24 h-24"><SearchResultImage {inscription} /></td>
-						<td
-							><a href={`/inscriptions/${inscription.filename.replace('.xml', '')}`}>
-								{inscription.title}
-							</a>
-						</td>
-						<td>{(inscription.languages || []).map((language) => language.label).join(', ')}</td>
-						<td>{formatDate(inscription)}</td>
-						<td id={`transcription-${inscription.id}`}>
-							<div class="prose prose-stone">
-								{getTranscription(inscription)}
-							</div>
-						</td>
-						<td id={`translation-${inscription.id}`}>
-							<div class="prose prose-stone whitespace-normal">
-								{getTranslation(inscription)}
-							</div>
-						</td>
-					</tr>
+					<TableResultRow {inscription} />
 				{/each}
 			{/if}
 		</tbody>
