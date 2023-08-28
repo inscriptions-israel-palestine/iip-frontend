@@ -1,7 +1,9 @@
 <script lang="ts">
 	import type { Edition, Inscription } from '$lib/types/inscription.type';
-	
+
+	import { browser } from '$app/environment';
 	import { page } from '$app/stores';
+	import { getEdition, transformTei } from '$lib/services/tei';
 	import SearchResultImage from './SearchResultImage.svelte';
 
 	export let inscriptions: Inscription[] = [];
@@ -16,27 +18,34 @@
 		return `Between ${parseDate(inscription.not_before)} and ${parseDate(inscription.not_after)}`;
 	}
 
-	function getEditionOfType(editions: Edition[], type: string) {
-		if (editions.length === 0) {
-			return 'Not found';
+	function getEditionOfType(inscription: Inscription, type: string) {
+		const edition = getEdition(inscription.editions, type);
+
+		if (browser) {
+			const el = document.getElementById(`${type}-${inscription.id}`);
+
+			if (el) {
+				transformTei((edition as Edition).raw_xml).then(html => {
+					// @ts-expect-error
+					el.replaceChildren(html);
+				});
+			}
 		}
 
-		const edition = editions.find((edition) => edition.edition_type === type);
-
-		return edition?.text || `[no ${type}]`;
+		return edition.text;
 	}
 
 	function getTranscription(inscription: Inscription) {
-		return getEditionOfType(inscription.editions || [], 'transcription');
+		return getEditionOfType(inscription, 'transcription');
 	}
 
 	function getTranslation(inscription: Inscription) {
-		return getEditionOfType(inscription.editions || [], 'translation');
+		return getEditionOfType(inscription, 'translation');
 	}
 
 	function pageHref(n: number) {
 		const searchParams = new URLSearchParams($page.url.search);
-		
+
 		searchParams.set('page', n.toString());
 
 		return `${$page.url.pathname}?${searchParams.toString()}`;
@@ -50,7 +59,7 @@
 		const n = parseInt(s, 10);
 
 		if (isNaN(n)) {
-			console.warn(`Got an invalid date: ${s}.`)
+			console.warn(`Got an invalid date: ${s}.`);
 			return 'Unknown';
 		}
 
@@ -86,8 +95,16 @@
 						</td>
 						<td>{(inscription.languages || []).map((language) => language.label).join(', ')}</td>
 						<td>{formatDate(inscription)}</td>
-						<td>{getTranscription(inscription)}</td>
-						<td>{getTranslation(inscription)}</td>
+						<td id={`transcription-${inscription.id}`}>
+							<div class="prose prose-stone">
+								{getTranscription(inscription)}
+							</div>
+						</td>
+						<td id={`translation-${inscription.id}`}>
+							<div class="prose prose-stone whitespace-normal">
+								{getTranslation(inscription)}
+							</div>
+						</td>
 					</tr>
 				{/each}
 			{/if}

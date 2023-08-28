@@ -2,173 +2,172 @@
 /* 2020-02-11 EM editing gap CSS */
 
 tei-expan > tei-ex::before {
-    content: "(";
+	content: '(';
 }
 tei-expan > tei-ex::after {
-    content: ")";
+	content: ')';
 }
 
 tei-expan > tei-ex[cert='low']::after {
-    content: "?)";
+	content: '?)';
 }
 
-.transcription  tei-am {
-    display:  none;
+.transcription tei-am {
+	display: none;
 }
 
 tei-add::before {
-    content: "<";
+	content: '<';
 }
 tei-add::after {
-    content: ">";
+	content: '>';
 }
 
 tei-add[place='above']::before {
-    content: "\\";
+	content: '\\';
 }
 tei-add[place='above']::after {
-    content: "/";
+	content: '/';
 }
 
 tei-add[place='below']::before {
-    content: "//";
+	content: '//';
 }
 tei-add[place='below']::after {
-    content: "\\\\";
+	content: '\\\\';
 }
 
 /* these selectors work because the divs are being rewritten in Django
 so as to be contained in p elements with class attributes "transcription", etc */
 .diplomatic tei-choice > tei-corr {
-    display: none;
+	display: none;
 }
 
 .diplomatic tei-choice > tei-reg {
-    display: none;
+	display: none;
 }
 
 /* Have choice sic and orig tags in transcription div appear on mouseover */
 .transcription tei-choice > tei-sic {
-  visibility: hidden;
-  background-color: black;
-  color: #fff;
-  text-align: center;
-  padding: 2px 5px;
-  border-radius: 6px;
-  position: absolute;
-  z-index: 1;
+	visibility: hidden;
+	background-color: black;
+	color: #fff;
+	text-align: center;
+	padding: 2px 5px;
+	border-radius: 6px;
+	position: absolute;
+	z-index: 1;
 }
 .transcription tei-choice:hover > tei-sic {
-  visibility: visible;
+	visibility: visible;
 }
 .transcription tei-choice > tei-orig {
-  visibility: hidden;
-  background-color: black;
-  color: #fff;
-  text-align: center;
-  padding: 2px 5px;
-  border-radius: 6px;
-  position: absolute;
-  z-index: 1;
+	visibility: hidden;
+	background-color: black;
+	color: #fff;
+	text-align: center;
+	padding: 2px 5px;
+	border-radius: 6px;
+	position: absolute;
+	z-index: 1;
 }
 .transcription tei-choice:hover > tei-orig {
-  visibility: visible;
+	visibility: visible;
 }
 
 /*⌜
 TOP LEFT CORNER
 Unicode: U+231C, UTF-8: E2 8C 9C*/
 .transcription tei-choice > tei-corr::before {
-  content: "⌜"
+	content: '⌜';
 }
 
 /*⌝
 TOP RIGHT CORNER
 Unicode: U+231D, UTF-8: E2 8C 9D*/
 .transcription tei-choice > tei-corr::after {
-  content: "⌝"
+	content: '⌝';
 }
 
 .transcription tei-choice > tei-reg::before {
-  content: "("
+	content: '(';
 }
 
 .transcription tei-choice > tei-reg::after {
-  content: ")"
+	content: ')';
 }
 
- :not(tei-choice) > tei-orig {
-    text-transform: uppercase;
+:not(tei-choice) > tei-orig {
+	text-transform: uppercase;
 }
 
 tei-choice > tei-unclear:first-child::after {
- content: "/";
+	content: '/';
 }
 
 /* easier to do this as a special case in Hebrew, as the XML element that is
 2nd Hebrew word counts as the first element. */
-[lang="heb"] > tei-choice > tei-unclear:first-child::before {
- content: "/";
+[lang='heb'] > tei-choice > tei-unclear:first-child::before {
+	content: '/';
 }
 
 tei-damage {
-
 }
 /*⟦
 MATHEMATICAL LEFT WHITE SQUARE BRACKET
 Unicode: U+27E6, UTF-8: E2 9F A6*/
 tei-del[rend='erasure']::before {
-    content: "⟦";
+	content: '⟦';
 }
 /*⟧
 MATHEMATICAL RIGHT WHITE SQUARE BRACKET
 Unicode: U+27E7, UTF-8: E2 9F A7*/
 tei-del[rend='erasure']::after {
-    content: "⟧";
+	content: '⟧';
 }
 
 tei-del[rend='corrected'] {
-    text-decoration: line-through;
+	text-decoration: line-through;
 }
 
 /* This is for del with no attributes. although this should probably not
 occur */
 tei-del::before {
-    content: "⟦";
+	content: '⟦';
 }
 
 tei-del::after {
-    content: "⟧";
+	content: '⟧';
 }
 
 tei-g::before {
-  content: "((";
-  unicode-bidi: bidi-override;
-  direction: ltr;
+	content: '((';
+	unicode-bidi: bidi-override;
+	direction: ltr;
 }
 
 tei-g::after {
-  content: "))";
-  unicode-bidi: bidi-override;
-  direction: ltr;
+	content: '))';
+	unicode-bidi: bidi-override;
+	direction: ltr;
 }
 
 tei-g:empty::before {
-  content: "((" attr(ref);
-  unicode-bidi: bidi-override;
-  direction: ltr;
+	content: '((' attr(ref);
+	unicode-bidi: bidi-override;
+	direction: ltr;
 }
 
-tei-gap[reason="illegible"][unit="character"][extent="unknown"]::before {
-  content: "[...]";
-  unicode-bidi: bidi-override;
-  direction: ltr;
+tei-gap[reason='illegible'][unit='character'][extent='unknown']::before {
+	content: '[...]';
+	unicode-bidi: bidi-override;
+	direction: ltr;
 }
 
-tei-gap[reason="lost"][unit="character"][extent="unknown"]::before {
-  content: "[---]";
-  unicode-bidi: bidi-override;
-  direction: ltr;
+tei-gap[reason='lost'][unit='character'][extent='unknown']::before {
+	content: '[---]';
+	unicode-bidi: bidi-override;
+	direction: ltr;
 }
 
 /*  doesn't appear in IIP at this point. Doesn't make sense, really
@@ -176,243 +175,285 @@ tei-gap[reason="illegible"][unit="line"][extent="unknown"]::before {
   content: "-----";
 } */
 
-tei-gap[reason="lost"][unit="line"][extent="unknown"]::before {
-  content: "-----";
-  unicode-bidi: bidi-override;
-  direction: ltr;
+tei-gap[reason='lost'][unit='line'][extent='unknown']::before {
+	content: '-----';
+	unicode-bidi: bidi-override;
+	direction: ltr;
 }
 /*  one two (or three) ill. characters, use one two (or three) dots
 otherwise parenthsis with number. Note that CSS rule for quantities unspecified
 has to be before the rules with specified @units. Otherwise it is the rule
 that selects. */
 
-tei-gap[reason="illegible"][unit="character"][quantity]::before {
-    content: "[+" attr(quantity) "+]";
-    unicode-bidi: bidi-override;
-    direction: ltr;
+tei-gap[reason='illegible'][unit='character'][quantity]::before {
+	content: '[+' attr(quantity) '+]';
+	unicode-bidi: bidi-override;
+	direction: ltr;
 }
 
-tei-gap[reason="illegible"][unit="character"][quantity="1"]::before {
-  content: "+";
+tei-gap[reason='illegible'][unit='character'][quantity='1']::before {
+	content: '+';
 }
 
-tei-gap[reason="illegible"][unit="character"][quantity="2"]::before {
-  content: "++";
+tei-gap[reason='illegible'][unit='character'][quantity='2']::before {
+	content: '++';
 }
 
-tei-gap[reason="lost"][unit="character"][quantity]::before {
-    content: "[-" attr(quantity) "-]";
-    unicode-bidi: bidi-override;
-    direction: ltr;
-  }
-
-  tei-gap[reason="lost"][unit="character"][quantity="1"]::before {
-    content: "[-]";
-  }
-
-  tei-gap[reason="lost"][unit="character"][quantity="2"]::before {
-    content: "[--]";
-  }
-
-
-tei-gap[reason="lost"][unit="character"][quantity][precision="low"]::before {
-        content: "[?-" attr(quantity) "-]";
-        unicode-bidi: bidi-override;
-        direction: ltr;
-      }
-
-      tei-gap[reason="lost"][unit="line"][quantity]::before {
-        content: "[- " attr(quantity) " lin. -]";
-        unicode-bidi: bidi-override;
-        direction: ltr;
-      }
-
-tei-gap[reason="lost"][unit="line"][quantity="1"]::before {
-        content: "[-]";
-      }
-
-tei-gap[reason="lost"][unit="line"][quantity="2"]::before {
-        content: "[--]";
-      }
-
-
-tei-gap[reason="illegible"][unit="character"][atLeast]::before {
-  content: "[+" attr(atLeast) "-" attr(atMost) "+]";
-  unicode-bidi: bidi-override;
-  direction: ltr;
+tei-gap[reason='lost'][unit='character'][quantity]::before {
+	content: '[-' attr(quantity) '-]';
+	unicode-bidi: bidi-override;
+	direction: ltr;
 }
 
-tei-gap[reason="illegible"][unit="character"][quantity][precision="low"]::before {
-        content: "[?+" attr(quantity) "+]";
-        unicode-bidi: bidi-override;
-        direction: ltr;
-      }
-
-tei-gap[reason="lost"][unit="character"][atLeast]::before {
-  content: "[-" attr(atLeast) "-" attr(atMost) "-]";
-  unicode-bidi: bidi-override;
-  direction: ltr;
+tei-gap[reason='lost'][unit='character'][quantity='1']::before {
+	content: '[-]';
 }
 
-tei-gap[reason="lost"][unit="line"][atLeast]::before {
-  content: "[- " attr(atLeast) "-" attr(atMost) " lin. -]";
-  unicode-bidi: bidi-override;
-  direction: ltr;
+tei-gap[reason='lost'][unit='character'][quantity='2']::before {
+	content: '[--]';
+}
+
+tei-gap[reason='lost'][unit='character'][quantity][precision='low']::before {
+	content: '[?-' attr(quantity) '-]';
+	unicode-bidi: bidi-override;
+	direction: ltr;
+}
+
+tei-gap[reason='lost'][unit='line'][quantity]::before {
+	content: '[- ' attr(quantity) ' lin. -]';
+	unicode-bidi: bidi-override;
+	direction: ltr;
+}
+
+tei-gap[reason='lost'][unit='line'][quantity='1']::before {
+	content: '[-]';
+}
+
+tei-gap[reason='lost'][unit='line'][quantity='2']::before {
+	content: '[--]';
+}
+
+tei-gap[reason='illegible'][unit='character'][atLeast]::before {
+	content: '[+' attr(atLeast) '-' attr(atMost) '+]';
+	unicode-bidi: bidi-override;
+	direction: ltr;
+}
+
+tei-gap[reason='illegible'][unit='character'][quantity][precision='low']::before {
+	content: '[?+' attr(quantity) '+]';
+	unicode-bidi: bidi-override;
+	direction: ltr;
+}
+
+tei-gap[reason='lost'][unit='character'][atLeast]::before {
+	content: '[-' attr(atLeast) '-' attr(atMost) '-]';
+	unicode-bidi: bidi-override;
+	direction: ltr;
+}
+
+tei-gap[reason='lost'][unit='line'][atLeast]::before {
+	content: '[- ' attr(atLeast) '-' attr(atMost) ' lin. -]';
+	unicode-bidi: bidi-override;
+	direction: ltr;
 }
 
 /* need to add @cert rules for gap */
 
 tei-lb::before {
-    content: "\a";
-    white-space: pre;
+	content: '\a';
+	white-space: pre;
 }
 tei-lb[break='no']::before {
-    content: "-\a";
-    white-space: pre;
+	content: '-\a';
+	white-space: pre;
 }
 
 tei-unclear {
-    text-decoration: underline;
-    text-decoration-style: dashed;
+	text-decoration: underline;
+	text-decoration-style: dashed;
 }
 
 tei-unclear[cert='low']::after {
-    content: "(?)";
-    unicode-bidi: bidi-override;
-    direction: ltr;
+	content: '(?)';
+	unicode-bidi: bidi-override;
+	direction: ltr;
 }
 
 /* see tei-choice for tei-unclear inside tei-choice */
 
 tei-hi[rend='superscript'] {
-    vertical-align: super;
-    font-size: smaller;
+	vertical-align: super;
+	font-size: smaller;
 }
 
 tei-hi[rend='supraline'] {
-    text-decoration: overline;
+	text-decoration: overline;
 }
 
 tei-hi[rend='underline'] {
-    text-decoration: underline;
+	text-decoration: underline;
 }
 
 tei-hi[rend='subscript'] {
-    vertical-align: sub;
-    font-size: smaller;
+	vertical-align: sub;
+	font-size: smaller;
 }
 
 tei-hi[rend='ligature'] {
-    /*TODO*/
+	/*TODO*/
 }
 
 tei-space[quantity][unit='character']::before {
-    content: " (vac." attr(quantity) ") ";
-    unicode-bidi: bidi-override;
-    direction: ltr;
+	content: ' (vac.' attr(quantity) ') ';
+	unicode-bidi: bidi-override;
+	direction: ltr;
 }
 
 tei-space[extent='unknown']::before {
-    content: " (vac.?) ";
-    unicode-bidi: bidi-override;
-    direction: ltr;
+	content: ' (vac.?) ';
+	unicode-bidi: bidi-override;
+	direction: ltr;
 }
 
 tei-space[dim='horizontal']::before {
-  content: " (vac.) ";
-  unicode-bidi: bidi-override;
-  direction: ltr;
+	content: ' (vac.) ';
+	unicode-bidi: bidi-override;
+	direction: ltr;
 }
 
 tei-note::before {
-    content: "/*";
+	content: '/*';
 }
 
 tei-note::after {
-    content: "*/";
+	content: '*/';
 }
 
-tei-supplied[reason="lost"]::before {
-    content: "[";
+tei-supplied[reason='lost']::before {
+	content: '[';
 }
 
-tei-supplied[reason="lost"]::after {
-    content: "]";
+tei-supplied[reason='lost']::after {
+	content: ']';
 }
 
-tei-supplied[reason="lost"][cert="low"]::after {
-    content: "?]";
+tei-supplied[reason='lost'][cert='low']::after {
+	content: '?]';
 }
 
-tei-supplied[reason="omitted"]::before {
-    content: "<";
+tei-supplied[reason='omitted']::before {
+	content: '<';
 }
 
-tei-supplied[reason="omitted"]::after {
-    content: ">";
+tei-supplied[reason='omitted']::after {
+	content: '>';
 }
 
-tei-supplied[reason="omitted"][cert='low']::after {
-    content: "?>";
+tei-supplied[reason='omitted'][cert='low']::after {
+	content: '?>';
 }
-tei-supplied[reason="subaudible"]::before {
-    content: "\(";
+tei-supplied[reason='subaudible']::before {
+	content: '\(';
 }
 
-tei-supplied[reason="subaudible"]::after {
-    content: "\)";
+tei-supplied[reason='subaudible']::after {
+	content: '\)';
 }
 
 tei-surplus::before {
-    content: "{";
+	content: '{';
 }
 
 tei-surplus::after {
-    content: "}";
+	content: '}';
 }
 
 .transcription tei-app > tei-lem {
-    display: none;
+	display: none;
 }
 
 .diplomatic tei-app > tei-rdg {
-    display: none;
+	display: none;
 }
 
 tei-gap[reason='ellipsis'] {
-    /*?*/
+	/*?*/
 }
 
 /* Hebrew */
 [lang='heb'] {
-    unicode-bidi: bidi-override;
-    direction: rtl;
-    text-align: right;
+	unicode-bidi: bidi-override;
+	direction: rtl;
+	text-align: right;
 }
 
 /* Aramaic */
 [lang='arc'] {
-    unicode-bidi: bidi-override;
-    direction: rtl;
-    text-align: right;
+	unicode-bidi: bidi-override;
+	direction: rtl;
+	text-align: right;
 }
 
 /* Latin */
 [lang='lat'] {
-    unicode-bidi: bidi-override;
-    direction: ltr;
-    text-align: left;
+	unicode-bidi: bidi-override;
+	direction: ltr;
+	text-align: left;
 }
 
 /* Greek */
 [lang='grc'] {
-    unicode-bidi: bidi-override;
-    direction: ltr;
-    text-align: left;
+	unicode-bidi: bidi-override;
+	direction: ltr;
+	text-align: left;
 }
 
 tei-num {
-  unicode-bidi: bidi-override;
-  direction: ltr;
-  text-align: left;
+	unicode-bidi: bidi-override;
+	direction: ltr;
+	text-align: left;
+}
+
+tei-div {
+	display: block;
+	margin-left: 3em;
+}
+
+tei-p {
+	counter-reset: lines;
+	counter-increment: lines;
+}
+
+tei-lb {
+	counter-increment: lines 1;
+}
+
+tei-div:hover tei-lb::after,
+tei-div:hover tei-p::before {
+	display: block;
+	float: left;
+	opacity: 0.5;
+	content: counter(lines);
+	margin-left: -3em;
+}
+
+.translation tei-div:hover tei-p::before {
+	content: '';
+}
+
+tei-p tei-lb:nth-of-type(5n-1)::after {
+	display: block;
+	float: left;
+	content: counter(lines);
+	margin-left: -3em;
+}
+
+tei-div[type='textpart']::before {
+	display: block;
+	margin-left: -1em;
+	margin-top: 4px;
+	text-transform: capitalize;
+	font-variant: small-caps;
+	opacity: 0.7;
+	content: attr(subtype) ' ' attr(n);
 }

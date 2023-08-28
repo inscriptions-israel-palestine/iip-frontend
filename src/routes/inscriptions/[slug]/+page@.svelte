@@ -1,15 +1,13 @@
 <script lang="ts">
 	import type { Auth0Client } from '@auth0/auth0-spa-js';
-	import type { DisplayStatus, Inscription } from '$lib/types/inscription.type';
+	import type { DisplayStatus, Edition } from '$lib/types/inscription.type';
 
 	import { createAuth0Client } from '$lib/services/authentication';
 
-	import { browser } from '$app/environment';
 	import { beforeUpdate, onMount } from 'svelte';
 	import { page } from '$app/stores';
+	import { getEdition, transformTei } from '$lib/services/tei';
 
-	// @ts-expect-error
-	import CETEI from 'CETEIcean';
 	import '../../../app.css';
 	import Maplet from '$lib/components/Maplet.svelte';
 
@@ -21,7 +19,6 @@
 
 	$: inscription = data.inscription;
 
-	const teiTransformer = new CETEI();
 	const EDITION_TYPES = ['diplomatic', 'transcription', 'translation'];
 
 	function changeDisplayStatus(e: Event) {
@@ -41,38 +38,6 @@
 		});
 	}
 
-	async function getEdition(inscription: Inscription, editionType: string) {
-		const edition = inscription.editions?.find((edition) => edition.edition_type === editionType);
-
-		// it might be better just to change how this
-		// editionType is stored in the database, but then
-		// it would be inconsistent with how it's phrased
-		// in the Epidoc XML.
-		if (editionType === 'transcription_segmented') {
-			editionType = 'segmented_transcription';
-		}
-
-		if (!edition?.text) {
-			return `[no ${editionType.replace('_', ' ')}]`;
-		}
-
-		if (browser) {
-			return transformTei(edition.raw_xml);
-		} else {
-			return edition.text;
-		}
-	}
-
-	function transformTei(raw: string | undefined | null) {
-		if (!raw) {
-			return false;
-		}
-
-		return new Promise((resolve, _reject) =>
-			teiTransformer.makeHTML5(raw, (data: any) => resolve(data))
-		);
-	}
-
 	beforeUpdate(async () => {
 		client = await createAuth0Client();
 
@@ -88,9 +53,12 @@
 			const el = document.getElementById(editionType);
 
 			if (el) {
-				const edition = await getEdition(inscription, editionType);
-				// @ts-expect-error
-				el.replaceChildren(edition);
+				const edition = getEdition(inscription.editions, editionType);
+
+				transformTei((edition as Edition).raw_xml).then(html => {
+					// @ts-expect-error
+					el.replaceChildren(html);
+				});
 			}
 		}
 	});
@@ -128,7 +96,7 @@
 				</h3>
 			{/if}
 			{#if token}
-				<form action={`/inscriptions/${inscription.filename.replace('.xml', '')}`} method="patch">
+				<form action={`/inscriptions/${inscription.filename.replace('.xml', '')}`} method="patch" class="mt-4">
 					<select
 						class="select select-bordered"
 						bind:value={inscription.display_status}
@@ -151,21 +119,21 @@
 				</thead>
 				<tbody>
 					<tr class="border-b border-gray-100">
-						<td class="max-w-0 px-0 py-5 align-top font-medium prose prose-stone">
+						<td class="max-w-0 px-0 py-5 align-top font-medium prose prose-stone whitespace-normal">
 							<div class="font-medium prose prose-stone">Transcription</div>
 							<p
 								id="transcription"
 								class="prose prose-p prose-stone font-normal transcription"
 							>
-								Processing transcription &hellip;
+								{getEdition(inscription.editions, 'transcription').text}
 							</p>
 						</td>
 					</tr>
 					<tr class="border-b border-gray-100">
-						<td class="max-w-0 px-0 py-5 align-top font-medium prose prose-stone">
+						<td class="max-w-0 px-0 py-5 align-top font-medium prose prose-stone whitespace-normal">
 							<div class="font-medium prose prose-stone">Translation</div>
 							<p id="translation" class="prose prose-p prose-stone font-normal translation">
-								Processing translation &hellip;
+								{getEdition(inscription.editions, 'translation').text}
 							</p>
 						</td>
 					</tr>
@@ -173,7 +141,7 @@
 						<td class="max-w-0 px-0 py-5 align-top font-medium prose prose-stone">
 							<div class="font-medium prose prose-stone">Diplomatic</div>
 							<p id="diplomatic" class="prose prose-p prose-stone font-normal diplomatic">
-								Processing diplomatic &hellip;
+								{getEdition(inscription.editions, 'diplomatic').text}
 							</p>
 						</td>
 					</tr>

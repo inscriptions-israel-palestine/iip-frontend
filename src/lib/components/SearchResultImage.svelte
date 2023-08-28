@@ -13,5 +13,8 @@
 </script>
 
 <a href={`/inscriptions/${inscription.filename.replace('.xml', '')}`}>
-	<img src={getFirstImageUrl(inscription)} alt={inscription.title} />
+	<img
+		src={getFirstImageUrl(inscription)}
+		alt={`Image of inscription ${inscription.filename.replace('.xml', '').toUpperCase()}`}
+	/>
 </a>
