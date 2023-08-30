@@ -1,9 +1,13 @@
 <script>
 	import '../app.css';
+
+	import { page } from '$app/stores';
+
+	$: fixedHeader = $page.url.pathname.includes("/map")
 </script>
 
 <div class="min-h-full">
-	<div class="top-0 z-50 flex h-24 min-w-full shrink-0 items-center bg-primary">
+	<div class="top-0 z-50 flex h-24 min-w-full shrink-0 items-center bg-primary" class:fixed={fixedHeader}>
 		<div class="flex h-24 shrink-0 items-center p-4">
 			<a href="/">
 				<img

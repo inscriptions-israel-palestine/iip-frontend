@@ -6,6 +6,7 @@
 	const searchParams = $page.url.searchParams;
 
 	$: facets = data.facets;
+	$: fixedSearchPanel = $page.url.pathname.includes("/map")
 	$: cities = searchParams.getAll('cities');
 	$: descriptionPlaceId = searchParams.get('description_place_id');
 	$: figures = searchParams.get('figures');
@@ -40,7 +41,7 @@
 </script>
 
 <div class="flex">
-	<div class="flex w-96 flex-col h-full z-50">
+	<div class="flex w-96 flex-col h-full z-40" class:fixed={fixedSearchPanel} class:pt-24={fixedSearchPanel}>
 		<div class="flex grow flex-col gap-y-5 bg-secondary px-6 py-4">
 			<form class="min-w-full" data-sveltekit-keepfocus>
 				<div>
@@ -61,7 +62,7 @@
 									name="text_search"
 									id="text_search"
 									class="input input-bordered input-primary bg-white w-full max-w-xs rounded-none"
-									placeholder="λόγος καὶ ἔργα"
+									placeholder="μνῆμα"
 									bind:value={textSearch}
 								/>
 							</div>
