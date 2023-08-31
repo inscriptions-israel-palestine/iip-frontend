@@ -46,15 +46,17 @@
 			.setLngLat(coordinates)
 			.setHTML(
 				`
-					<article class="prose prose-stone prose-sm">
-						<h3>${properties.title}</h3>
-						<p>
-							${properties.description || ''}
-						</p>
-						<p>
+					<div class="prose prose-stone prose-sm max-h-64">
+						<h3 class="prose prose-stone prose-h3">${properties.title}</h3>
+						<div class="max-h-24 overflow-y-auto">
+							<p class="text-stone text-sm">
+								${properties.description || ''}
+							</p>
+						</div>
+						<p class="text-stone text-sm">
 							<a href="/inscriptions/${properties.filename.replace('.xml', '')}">View</a>
 						</p>
-					</article>
+					</div>
 					`
 			)
 			.addTo(map);
@@ -86,11 +88,15 @@
 			paint: {
 				// Use step expressions (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-step)
 				// with three steps to implement three types of circles:
-				//   * Blue, 20px circles when point count is less than 100
-				//   * Yellow, 30px circles when point count is between 100 and 750
-				//   * Pink, 40px circles when point count is greater than or equal to 750
-				'circle-color': ['step', ['get', 'point_count'], '#ebb297', 100, '#e28d66', 750, '#d15e28'],
-				'circle-radius': ['step', ['get', 'point_count'], 20, 100, 30, 750, 40]
+				//   * #76c1e5, 20px circles when point count is less than 100
+				//   * #45abdb, 30px circles when point count is between 100 and 750
+				//   * #1b6a8f, 40px circles when point count is greater than or equal to 750
+				'circle-color': ['step', ['get', 'point_count'], '#76c1e5', 100, '#45abdb', 750, '#1b6a8f'],
+				'circle-opacity': ['step', ['get', 'point_count'], 0.85, 100, 0.90, 750, 0.95],
+				'circle-radius': ['step', ['get', 'point_count'], 20, 100, 30, 750, 40],
+				'circle-stroke-color': ['step', ['get', 'point_count'], '#1b6a8f', 100, '#1b6a8f', 750, '#12465e'],
+				'circle-stroke-width': 2,
+
 			}
 		});
 
@@ -115,7 +121,7 @@
 				'circle-color': '#289bd1',
 				'circle-radius': 8,
 				'circle-stroke-width': 1,
-				'circle-stroke-color': '#fff'
+				'circle-stroke-color': '#a8d8ee'
 			}
 		});
 
