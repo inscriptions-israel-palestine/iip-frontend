@@ -52,7 +52,7 @@
 	}
 
 	beforeUpdate(async () => {
-		client = await createAuth0Client();
+		client = await createAuth0Client($page.url.toString());
 
 		try {
 			token = await client.getTokenSilently();

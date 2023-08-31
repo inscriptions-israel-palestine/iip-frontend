@@ -6,7 +6,7 @@
 	const searchParams = $page.url.searchParams;
 
 	$: facets = data.facets;
-	$: fixedSearchPanel = $page.url.pathname.includes("/map")
+	$: fixedSearchPanel = $page.url.pathname.includes('/map');
 	$: cities = searchParams.getAll('cities');
 	$: descriptionPlaceId = searchParams.get('description_place_id');
 	$: figures = searchParams.get('figures');
@@ -41,7 +41,11 @@
 </script>
 
 <div class="flex">
-	<div class="flex w-96 flex-col h-full z-40 overflow-y-auto" class:fixed={fixedSearchPanel} class:pt-24={fixedSearchPanel}>
+	<div
+		class="flex w-96 flex-col h-full z-40 overflow-y-auto"
+		class:fixed={fixedSearchPanel}
+		class:pt-24={fixedSearchPanel}
+	>
 		<div class="flex grow flex-col gap-y-5 bg-secondary px-6 py-4">
 			<form class="min-w-full" data-sveltekit-keepfocus>
 				<div>
@@ -182,7 +186,7 @@
 								</div>
 							</div>
 						</div>
-						
+
 						<div class="divider" />
 
 						<div
@@ -197,7 +201,7 @@
 									<h2 class="mb-2 font-semibold">City</h2>
 									<div class="h-48 overflow-y-auto">
 										{#each facets.cities as [city, inscriptionsCount]}
-											{#if city.placename.trim() !== ""}
+											{#if city.placename.trim() !== ''}
 												<div class="form-control">
 													<label class="label justify-start">
 														<input
@@ -209,7 +213,8 @@
 															bind:group={cities}
 														/>
 														<span class="label-text ml-4">{city.placename}</span>
-														<span class="label-text ml-2 text-stone-400">({inscriptionsCount})</span>
+														<span class="label-text ml-2 text-stone-400">({inscriptionsCount})</span
+														>
 														{#if city.pleiades_ref}
 															<a
 																class="cursor-pointer ml-4 text-stone-400 text-sm hover:underline"
@@ -227,7 +232,7 @@
 						</div>
 
 						<div class="divider" />
-						
+
 						<div
 							class={`font-small collapse collapse-arrow ${
 								genres.length > 0 ? 'collapse-open' : ''
@@ -256,7 +261,7 @@
 								</div>
 							</div>
 						</div>
-						
+
 						<div class="divider" />
 
 						<div
@@ -289,7 +294,7 @@
 								</div>
 							</div>
 						</div>
-						
+
 						<div class="divider" />
 
 						<div
@@ -320,7 +325,7 @@
 								</div>
 							</div>
 						</div>
-						
+
 						<div class="divider" />
 
 						<div
@@ -353,7 +358,7 @@
 								</div>
 							</div>
 						</div>
-						
+
 						<div class="divider" />
 
 						<div

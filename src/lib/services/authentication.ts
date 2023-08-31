@@ -13,11 +13,11 @@ function redirectUrl() {
 	return `${window.location.protocol}//${window.location.hostname}${port}/inscriptions`;
 }
 
-export async function createAuth0Client() {
+export async function createAuth0Client(redirect_uri: string) {
 	const client = new Auth0Client({
 		authorizationParams: {
 			audience: env.PUBLIC_AUTH0_AUDIENCE,
-			redirect_uri: redirectUrl(),
+			redirect_uri,
 			scope: 'inscriptions:all'
 		},
 		cacheLocation: 'localstorage',
@@ -36,7 +36,7 @@ export async function createAuth0Client() {
 	return client;
 }
 
-export async function logIn(client) {
+export async function logIn(client: Auth0Client) {
 	try {
 		await client.loginWithRedirect();
 
@@ -47,7 +47,7 @@ export async function logIn(client) {
 	}
 }
 
-export function logOut(client) {
+export function logOut(client: Auth0Client) {
 	return client.logout({
 		logoutParams: {
 			returnTo: redirectUrl()
