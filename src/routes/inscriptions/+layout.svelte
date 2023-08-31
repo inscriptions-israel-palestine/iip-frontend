@@ -41,7 +41,7 @@
 </script>
 
 <div class="flex">
-	<div class="flex w-96 flex-col h-full z-40" class:fixed={fixedSearchPanel} class:pt-24={fixedSearchPanel}>
+	<div class="flex w-96 flex-col h-full z-40 overflow-y-auto" class:fixed={fixedSearchPanel} class:pt-24={fixedSearchPanel}>
 		<div class="flex grow flex-col gap-y-5 bg-secondary px-6 py-4">
 			<form class="min-w-full" data-sveltekit-keepfocus>
 				<div>
@@ -196,7 +196,7 @@
 								<div class="border border-stone-300 p-4 rounded mb-2">
 									<h2 class="mb-2 font-semibold">City</h2>
 									<div class="h-48 overflow-y-auto">
-										{#each facets.cities as city}
+										{#each facets.cities as [city, inscriptionsCount]}
 											{#if city.placename.trim() !== ""}
 												<div class="form-control">
 													<label class="label justify-start">
@@ -209,6 +209,7 @@
 															bind:group={cities}
 														/>
 														<span class="label-text ml-4">{city.placename}</span>
+														<span class="label-text ml-2 text-stone-400">({inscriptionsCount})</span>
 														{#if city.pleiades_ref}
 															<a
 																class="cursor-pointer ml-4 text-stone-400 text-sm hover:underline"
@@ -236,7 +237,7 @@
 							<div class="collapse-title font-medium">Type of Inscription</div>
 							<div class="collapse-content">
 								<div class="border border-stone-300 p-4 rounded h-48 overflow-y-auto">
-									{#each facets.genres as genre}
+									{#each facets.genres as [genre, inscriptionsCount]}
 										<div class="form-control">
 											<label class="label justify-start">
 												<input
@@ -248,6 +249,7 @@
 													bind:group={genres}
 												/>
 												<span class="label-text ml-4">{genre.description || genre.xml_id}</span>
+												<span class="label-text ml-2 text-stone-400">({inscriptionsCount})</span>
 											</label>
 										</div>
 									{/each}
@@ -266,20 +268,21 @@
 							<div class="collapse-title font-medium">Physical Type</div>
 							<div class="collapse-content">
 								<div class="border border-stone-300 p-4 rounded h-48 overflow-y-auto">
-									{#each facets.physical_types as physicalType}
+									{#each facets.physical_types as [physicalType, inscriptionsCount]}
 										<div class="form-control">
 											<label class="label justify-start">
 												<input
 													class="checkbox rounded-none h-4 w-4"
 													id={`physical_type-${physicalType.id}`}
 													type="checkbox"
-													name="physicalTypes"
+													name="physical_types"
 													value={physicalType.id.toString()}
 													bind:group={physicalTypes}
 												/>
 												<span class="label-text ml-4"
 													>{physicalType.description || physicalType.xml_id}</span
 												>
+												<span class="label-text ml-2 text-stone-400">({inscriptionsCount})</span>
 											</label>
 										</div>
 									{/each}
@@ -298,7 +301,7 @@
 							<div class="collapse-title font-medium">Language</div>
 							<div class="collapse-content">
 								<div class="border border-stone-300 p-4 rounded max-h-48 overflow-y-auto">
-									{#each facets.languages as language}
+									{#each facets.languages as [language, inscriptionsCount]}
 										<div class="form-control">
 											<label class="label justify-start">
 												<input
@@ -310,6 +313,7 @@
 													bind:group={languages}
 												/>
 												<span class="label-text ml-4">{language.label || language.short_form}</span>
+												<span class="label-text ml-2 text-stone-400">({inscriptionsCount})</span>
 											</label>
 										</div>
 									{/each}
@@ -328,7 +332,7 @@
 							<div class="collapse-title font-medium">Religion</div>
 							<div class="collapse-content">
 								<div class="border border-stone-300 p-4 rounded max-h-48 overflow-y-auto">
-									{#each facets.religions as religion}
+									{#each facets.religions as [religion, inscriptionsCount]}
 										<div class="form-control">
 											<label class="label justify-start">
 												<input
@@ -342,6 +346,7 @@
 												<span class="label-text ml-4"
 													>{religion.description || religion.xml_id}</span
 												>
+												<span class="label-text ml-2 text-stone-400">({inscriptionsCount})</span>
 											</label>
 										</div>
 									{/each}
@@ -360,7 +365,7 @@
 							<div class="collapse-title font-medium">Material</div>
 							<div class="collapse-content">
 								<div class="border border-stone-300 p-4 rounded max-h-48 overflow-y-auto">
-									{#each facets.materials as material}
+									{#each facets.materials as [material, inscriptionsCount]}
 										<div class="form-control">
 											<label class="label justify-start">
 												<input
@@ -374,6 +379,7 @@
 												<span class="label-text ml-4"
 													>{material.description || material.xml_id}</span
 												>
+												<span class="label-text ml-2 text-stone-400">({inscriptionsCount})</span>
 											</label>
 										</div>
 									{/each}

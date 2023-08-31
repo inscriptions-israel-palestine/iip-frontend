@@ -38,7 +38,7 @@
 </script>
 
 <tr>
-    <td class="w-24 h-24"><SearchResultImage {inscription} /></td>
+    <td class="w-24 h-24 sm:w-8 sm:h-8"><SearchResultImage {inscription} /></td>
     <td
         ><a href={`/inscriptions/${inscription.filename.replace('.xml', '')}`}>
             {inscription.title}

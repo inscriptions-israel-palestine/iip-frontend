@@ -188,8 +188,8 @@
 	}
 </script>
 
-<div class="flex w-full h-full">
-	<div class="absolute h-screen w-3/4 md:w-full top-24 right-0 bg-theme-700 text-white" bind:this={mapContainer} />
+<div class="flex w-full h-full max-h-screen">
+	<div class="absolute h-screen w-3/4 md:w-full right-0 bg-theme-700 text-white" bind:this={mapContainer} />
 	{#if map}
 		<MapOverlays map={map} />
 	{/if}
