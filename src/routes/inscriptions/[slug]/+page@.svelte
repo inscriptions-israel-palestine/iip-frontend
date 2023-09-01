@@ -52,7 +52,7 @@
 	}
 
 	beforeUpdate(async () => {
-		client = await createAuth0Client($page.url.toString());
+		client = await createAuth0Client(`${$page.url.origin}/inscriptions`);
 
 		try {
 			token = await client.getTokenSilently();
