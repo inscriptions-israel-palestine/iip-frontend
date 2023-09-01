@@ -92,6 +92,10 @@
 	});
 </script>
 
+<svelte:head>
+	<title>Inscriptions of Israel/Palestine</title>
+</svelte:head>
+
 <div class="flex">
 	<div
 		class="flex w-96 flex-col h-full z-40 overflow-y-auto"
