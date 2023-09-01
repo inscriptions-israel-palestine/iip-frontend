@@ -1,9 +1,15 @@
 <script lang="ts">
+	import { afterNavigate } from '$app/navigation';
 	import { page } from '$app/stores';
 
 	export let data;
 
 	const searchParams = $page.url.searchParams;
+
+	// we need to shadow the searchParams reactively in order
+	// to properly show changes in the faces without yet applying
+	// the faceted filters to the results
+	$: facetParams = new URLSearchParams(searchParams);
 
 	$: facets = data.facets;
 	$: fixedSearchPanel = $page.url.pathname.includes('/map');
@@ -23,6 +29,7 @@
 	$: textSearch = searchParams.get('text_search');
 
 	function reset(_e: Event) {
+		facetParams = new URLSearchParams(searchParams.toString());
 		cities = [];
 		descriptionPlaceId = '';
 		figures = '';
@@ -38,6 +45,51 @@
 		religions = [];
 		textSearch = '';
 	}
+
+	async function updateFacets(e: Event) {
+		if (e?.target instanceof HTMLInputElement) {
+			const facetCategory = e.target.name;
+			const facetId = e.target.value;
+			const isChecked = e.target.checked;
+
+			if (isChecked) {
+				const isFacetApplied = facetParams.getAll(facetCategory).includes(facetId);
+
+				if (!isFacetApplied) {
+					facetParams.append(facetCategory, facetId);
+				}
+			} else {
+				// hopefully eventually, URLSearchParams.delete() will support a `value` attribute.
+				// https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams/delete
+				// until then:
+				const currentValues = facetParams.getAll(facetCategory);
+				const newValues = currentValues.filter((v) => v.toString() != facetId.toString());
+
+				if (newValues.length === 0) {
+					facetParams.delete(facetCategory);
+				} else {
+					for (let i = 0, l = newValues.length; i < l; i++) {
+						facetParams.set(facetCategory, newValues[i]);
+					}
+				}
+			}
+
+			const response = await fetch(`/facets?${facetParams.toString()}`);
+			const data = await response.json();
+
+			facets = data.facets;
+		}
+	}
+
+	// After a client-side navigation event, we need to update
+	// the shadowed searchParams in `facetParams` in order to
+	// keep the facet counts in sync. Otherwise, for example,
+	// the facet counts will suddenly jump to a much larger
+	// count because the query passed to the server differs
+	// from the query reflected by the facet selection state.
+	afterNavigate(() => {
+		facetParams = new URLSearchParams($page.url.searchParams);
+	});
 </script>
 
 <div class="flex">
@@ -211,6 +263,8 @@
 															name="cities"
 															value={city.id.toString()}
 															bind:group={cities}
+															on:change={updateFacets}
+															disabled={inscriptionsCount === 0}
 														/>
 														<span class="label-text ml-4">{city.placename}</span>
 														<span class="label-text ml-2 text-stone-400">({inscriptionsCount})</span
@@ -252,6 +306,8 @@
 													name="genres"
 													value={genre.id.toString()}
 													bind:group={genres}
+													on:change={updateFacets}
+													disabled={inscriptionsCount === 0}
 												/>
 												<span class="label-text ml-4">{genre.description || genre.xml_id}</span>
 												<span class="label-text ml-2 text-stone-400">({inscriptionsCount})</span>
@@ -283,6 +339,8 @@
 													name="physical_types"
 													value={physicalType.id.toString()}
 													bind:group={physicalTypes}
+													on:change={updateFacets}
+													disabled={inscriptionsCount === 0}
 												/>
 												<span class="label-text ml-4"
 													>{physicalType.description || physicalType.xml_id}</span
@@ -316,6 +374,8 @@
 													name="languages"
 													value={language.id.toString()}
 													bind:group={languages}
+													on:change={updateFacets}
+													disabled={inscriptionsCount === 0}
 												/>
 												<span class="label-text ml-4">{language.label || language.short_form}</span>
 												<span class="label-text ml-2 text-stone-400">({inscriptionsCount})</span>
@@ -347,6 +407,8 @@
 													name="religions"
 													value={religion.id.toString()}
 													bind:group={religions}
+													on:change={updateFacets}
+													disabled={inscriptionsCount === 0}
 												/>
 												<span class="label-text ml-4"
 													>{religion.description || religion.xml_id}</span
@@ -380,6 +442,8 @@
 													name="materials"
 													value={material.id.toString()}
 													bind:group={materials}
+													on:change={updateFacets}
+													disabled={inscriptionsCount === 0}
 												/>
 												<span class="label-text ml-4"
 													>{material.description || material.xml_id}</span
@@ -392,7 +456,9 @@
 							</div>
 						</div>
 						<div class="flex justify-between">
-							<button class="btn btn-primary mt-8 rounded-none w-1/2" type="submit">Search</button>
+							<button class="btn btn-primary mt-8 rounded-none w-1/2" type="submit"
+								>Apply filters</button
+							>
 							<button
 								class="btn btn-secondary mt-8 rounded-none w-1/2"
 								type="reset"
