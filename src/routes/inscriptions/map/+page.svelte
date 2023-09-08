@@ -1,10 +1,16 @@
 <script lang="ts">
 	import { page } from '$app/stores';
 	import SearchMap from '$lib/components/SearchMap.svelte';
+	import { onMount } from 'svelte';
 
-	export let data;
+	$: inscriptions = [];
 
-	$: inscriptions = data.inscriptions;
+	onMount(async () => {
+		const response = await fetch($page.url.toString());
+		const json = await response.json();
+
+		inscriptions = json.inscriptions;
+	});
 </script>
 
 <main class="py-10">
