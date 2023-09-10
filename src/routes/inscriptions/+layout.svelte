@@ -96,9 +96,9 @@
 	<title>Inscriptions of Israel/Palestine</title>
 </svelte:head>
 
-<div class="grid grid-cols-1 sm:grid-cols-4">
+<div class="grid grid-cols-4">
 	<div
-		class="col-span-1 md:w-64 lg:w-96 max-w-96 h-full z-40 overflow-y-auto"
+		class="hidden md:flex md:col-span-1 md:w-80 lg:w-96 max-w-96 h-full z-40 overflow-y-auto"
 		class:fixed={fixedSearchPanel}
 		class:pt-24={fixedSearchPanel}
 	>
@@ -459,7 +459,7 @@
 		</div>
 	</div>
 
-	<div class="col-auto sm:col-span-3">
+	<div class="col-span-4 md:col-span-3">
 		<slot />
 	</div>
 </div>

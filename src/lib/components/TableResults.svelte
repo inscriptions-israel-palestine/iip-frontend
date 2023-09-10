@@ -18,25 +18,15 @@
 </script>
 
 <div class="top-24 px-24 overflow-auto">
-	<table class="table table-md table-pin-rows">
-		<thead>
-			<tr>
-				<td><!-- image if available --></td>
-				<td>Title</td>
-				<td>Language(s)</td>
-				<td>Date</td>
-				<td>Transcription</td>
-				<td>Translation</td>
-			</tr>
-		</thead>
-		<tbody>
-			{#if inscriptions && inscriptions.length > 0}
-				{#each inscriptions as inscription (inscription.id)}
-					<TableResultRow {inscription} />
-				{/each}
-			{/if}
-		</tbody>
-	</table>
+	<div
+		class="divide-y divide-gray-200 overflow-hidden rounded-lg bg-gray-200 shadow sm:grid sm:grid-cols-2 sm:gap-px sm:divide-y-0"
+	>
+		{#if inscriptions && inscriptions.length > 0}
+			{#each inscriptions as inscription (inscription.id)}
+				<TableResultRow {inscription} />
+			{/each}
+		{/if}
+	</div>
 	<nav class="flex items-center justify-between border-t border-gray-200 px-4 sm:px-0">
 		<div class="max-w-screen-lg">
 			{#each { length: totalPages } as _, i}
