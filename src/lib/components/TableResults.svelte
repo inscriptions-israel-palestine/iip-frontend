@@ -17,7 +17,7 @@
 	}
 </script>
 
-<div class="absolute top-24 left-96 px-24 overflow-auto">
+<div class="top-24 px-24 overflow-auto">
 	<table class="table table-md table-pin-rows">
 		<thead>
 			<tr>
