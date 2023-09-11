@@ -188,6 +188,14 @@
 			addClusterLayers(map);
 			loading = false;
 		});
+
+		map.on('dataloading', () => {
+			loading = true;
+		});
+
+		map.on('data', () => {
+			loading = false;
+		});
 	});
 
 	onDestroy(() => {
