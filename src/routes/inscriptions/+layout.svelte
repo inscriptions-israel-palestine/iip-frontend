@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { afterNavigate } from '$app/navigation';
+	import { afterNavigate, goto } from '$app/navigation';
 	import { page } from '$app/stores';
 
 	export let data;
@@ -28,7 +28,7 @@
 	$: religions = searchParams.getAll('religions');
 	$: textSearch = searchParams.get('text_search');
 
-	function reset(_e: Event) {
+	async function reset(_e: Event) {
 		facetParams = new URLSearchParams(searchParams.toString());
 		cities = [];
 		descriptionPlaceId = '';
@@ -44,6 +44,13 @@
 		regions = [];
 		religions = [];
 		textSearch = '';
+
+		goto($page.url.pathname);
+
+		const response = await fetch(`/facets?${facetParams.toString()}`);
+		const data = await response.json();
+
+		facets = data.facets;
 	}
 
 	async function updateFacets(e: Event) {
@@ -78,6 +85,8 @@
 			const data = await response.json();
 
 			facets = data.facets;
+
+			goto(`${$page.url.pathname}?${facetParams.toString()}`, { noScroll: true });
 		}
 	}
 

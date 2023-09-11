@@ -4,13 +4,18 @@
 	import { onMount } from 'svelte';
 
 	$: inscriptions = [];
+	$: {
+		fetchInscriptions($page.url.toString());
+	}
 
-	onMount(async () => {
-		const response = await fetch($page.url.toString());
+	async function fetchInscriptions(url: string) {
+		const response = await fetch(url);
 		const json = await response.json();
 
 		inscriptions = json.inscriptions;
-	});
+	}
+
+	onMount(() => fetchInscriptions($page.url.toString()));
 </script>
 
 <main class="py-10">
