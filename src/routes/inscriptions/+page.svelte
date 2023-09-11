@@ -5,6 +5,8 @@
 	export let data;
 
 	$: inscriptions = data.inscriptions;
+	$: currentPage = data.page;
+	$: totalPages = data.pages;
 </script>
 
 <main class="py-10">
@@ -34,5 +36,9 @@
 			</span>
 		</a>
 	</div>
-	<TableResults {inscriptions} currentPage={data.page} totalPages={data.pages} />
+	{#if inscriptions.length === 0}
+		<h2 class="prose prose-heading prose-h2 text-center text-2xl">No inscriptions found.</h2>
+	{:else}
+		<TableResults {inscriptions} {currentPage} {totalPages} />
+	{/if}
 </main>

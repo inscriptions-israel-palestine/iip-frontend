@@ -28,6 +28,66 @@
 	$: religions = searchParams.getAll('religions');
 	$: textSearch = searchParams.get('text_search');
 
+	function _getTuples(facetName: string, ids: any[]) {
+		if (typeof facets !== 'undefined') {
+			return facets[facetName].filter((t: [any, number]) => ids.includes(t[0].id.toString())) || [];
+		}
+
+		return [];
+	}
+
+	function listSelectedCities() {
+		const selectedTuples = _getTuples('cities', cities);
+
+		return selectedTuples.map((t: [any, number]) => t[0].placename.trim());
+	}
+
+	function listSelectedGenres() {
+		const selectedTuples = _getTuples('genres', genres);
+
+		return selectedTuples.map((t: [any, number]) => t[0].description || t[0].xml_id);
+	}
+
+	function listSelectedLanguages() {
+		const selectedTuples = _getTuples('languages', languages);
+
+		return selectedTuples.map((t: [any, number]) => t[0].label || t[0].short_form);
+	}
+
+	function listSelectedMaterials() {
+		const selectedTuples = _getTuples('materials', materials);
+
+		return selectedTuples.map((t: [any, number]) => t[0].description || t[0].xml_id);
+	}
+
+	function listSelectedPhysicalTypes() {
+		const selectedTuples = _getTuples('physical_types', physicalTypes);
+
+		return selectedTuples.map((t: [any, number]) => t[0].description || t[0].xml_id);
+	}
+
+	function listSelectedReligions() {
+		const selectedTuples = _getTuples('religions', religions);
+
+		return selectedTuples.map((t: [any, number]) => t[0].description || t[0].xml_id);
+	}
+
+	let selectedCities = listSelectedCities();
+	let selectedGenres = listSelectedGenres();
+	let selectedLanguages = listSelectedLanguages();
+	let selectedMaterials = listSelectedMaterials();
+	let selectedPhysicalTypes = listSelectedPhysicalTypes();
+	let selectedReligions = listSelectedReligions();
+
+	const facetUpdateFunctions = {
+		cities: () => { selectedCities = listSelectedCities() },
+		genres: () => { selectedGenres = listSelectedGenres() },
+		languages: () => { selectedLanguages = listSelectedLanguages() },
+		materials: () => { selectedMaterials = listSelectedMaterials() },
+		physical_types: () => { selectedPhysicalTypes = listSelectedPhysicalTypes() },
+		religions: () => { selectedReligions = listSelectedReligions() },
+	};
+
 	async function reset(_e: Event) {
 		facetParams = new URLSearchParams(searchParams.toString());
 		cities = [];
@@ -86,6 +146,9 @@
 
 			facets = data.facets;
 
+			// @ts-expect-error
+			facetUpdateFunctions[facetCategory]();
+
 			goto(`${$page.url.pathname}?${facetParams.toString()}`, { noScroll: true });
 		}
 	}
@@ -121,6 +184,37 @@
 					</h2>
 
 					<div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+						<div class="col-span-full">
+							<h3 class="font-semibold underline leading-7 text-stone-700">
+								Applied filters
+							</h3>
+
+							<p class="prose prose-p">
+								<span class="underline">City: </span>
+								{selectedCities.join(', ')}
+							</p>
+							<p class="prose prose-p">
+								<span class="underline">Genres: </span> 
+								{selectedGenres.join(', ')}
+							</p>
+							<p class="prose prose-p">
+								<span class="underline">Physical types: </span> 
+								{selectedPhysicalTypes.join(', ')}
+							</p>
+							<p class="prose prose-p">
+								<span class="underline">Languages: </span> 
+								{selectedLanguages.join(', ')}
+							</p>
+							<p class="prose prose-p">
+								<span class="underline">Religions: </span> 
+								{selectedReligions.join(', ')}
+							</p>
+							<p class="prose prose-p">
+								<span class="underline">Materials: </span> 
+								{selectedMaterials.join(', ')}
+							</p>
+						</div>
+
 						<div class="col-span-full">
 							<label for="text_search" class="label">
 								<span class="label-text">Text or translation</span>
