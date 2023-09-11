@@ -98,7 +98,7 @@
 
 <div class="grid grid-cols-4">
 	<div
-		class="hidden md:flex md:col-span-1 md:w-80 lg:w-96 max-w-96 h-full z-40 overflow-y-auto"
+		class="hidden md:flex md:flex-col md:col-span-1 md:w-80 lg:w-96 max-w-96 h-full z-40 overflow-y-auto"
 		class:fixed={fixedSearchPanel}
 		class:pt-24={fixedSearchPanel}
 	>

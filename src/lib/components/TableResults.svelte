@@ -19,7 +19,7 @@
 
 <div class="top-24 px-24 overflow-auto">
 	<div
-		class="divide-y divide-gray-200 overflow-hidden rounded-lg bg-gray-200 shadow sm:grid sm:grid-cols-2 sm:gap-px sm:divide-y-0"
+		class="border-t divide-y divide-gray-200 overflow-hidden rounded-lg bg-gray-200 shadow sm:grid sm:grid-cols-2 sm:gap-px sm:divide-y-0"
 	>
 		{#if inscriptions && inscriptions.length > 0}
 			{#each inscriptions as inscription (inscription.id)}
