@@ -42,7 +42,7 @@
 <div
 	class="group relative bg-white p-6"
 >
-	<div class="inline-flex p-3 h-24 w-24 sm:h-48 sm:w-48">
+	<div class="inline-flex p-3">
         <SearchResultImage {inscription} />
 	</div>
 	<div class="mt-8">
