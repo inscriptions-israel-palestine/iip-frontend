@@ -1,0 +1,28 @@
+name: deploy
+
+on:
+  workflow_run:
+    workflows: [build]
+    types:  [completed]
+  
+env:
+  RECLAIM_ENV_NAME: iip-dev
+  RECLAIM_DEPLOYMENT_TAG: main
+  RECLAIM_NODE_ID: 13481
+
+jobs:
+  on-failure:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    steps:
+      - run: echo 'The triggering workflow failed'
+  on-success:
+    runs-on: ubuntu-latest
+    environment: deployment
+    env:
+      RECLAIM_SESSION_TOKEN: ${{secrets.RECLAIM_SESSION_TOKEN}}
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: Run Jelastic deployment command
+        run: |
+          curl -X POST --url "https://app.my.reclaim.cloud/1.0/environment/control/rest/redeploycontainerbyid?envName=${{env.RECLAIM_ENV_NAME}}&session=$RECLAIM_SESSION_TOKEN&tag=${{env.RECLAIM_DEPLOYMENT_TAG}}&nodeId=${{env.RECLAIM_NODE_ID}}" | jq .result

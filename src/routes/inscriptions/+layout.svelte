@@ -80,12 +80,24 @@
 	let selectedReligions = listSelectedReligions();
 
 	const facetUpdateFunctions = {
-		cities: () => { selectedCities = listSelectedCities() },
-		genres: () => { selectedGenres = listSelectedGenres() },
-		languages: () => { selectedLanguages = listSelectedLanguages() },
-		materials: () => { selectedMaterials = listSelectedMaterials() },
-		physical_types: () => { selectedPhysicalTypes = listSelectedPhysicalTypes() },
-		religions: () => { selectedReligions = listSelectedReligions() },
+		cities: () => {
+			selectedCities = listSelectedCities();
+		},
+		genres: () => {
+			selectedGenres = listSelectedGenres();
+		},
+		languages: () => {
+			selectedLanguages = listSelectedLanguages();
+		},
+		materials: () => {
+			selectedMaterials = listSelectedMaterials();
+		},
+		physical_types: () => {
+			selectedPhysicalTypes = listSelectedPhysicalTypes();
+		},
+		religions: () => {
+			selectedReligions = listSelectedReligions();
+		}
 	};
 
 	async function reset(_e: Event) {
@@ -146,8 +158,10 @@
 
 			facets = data.facets;
 
-			// @ts-expect-error
-			facetUpdateFunctions[facetCategory]();
+			try {
+				// @ts-expect-error
+				facetUpdateFunctions[facetCategory]();
+			} catch (_error) {}
 
 			goto(`${$page.url.pathname}?${facetParams.toString()}`, { noScroll: true });
 		}
@@ -185,32 +199,30 @@
 
 					<div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
 						<div class="col-span-full">
-							<h3 class="font-semibold underline leading-7 text-stone-700">
-								Applied filters
-							</h3>
+							<h3 class="font-semibold underline leading-7 text-stone-700">Applied filters</h3>
 
 							<p class="prose prose-p">
 								<span class="underline">City: </span>
 								{selectedCities.join(', ')}
 							</p>
 							<p class="prose prose-p">
-								<span class="underline">Genres: </span> 
+								<span class="underline">Genres: </span>
 								{selectedGenres.join(', ')}
 							</p>
 							<p class="prose prose-p">
-								<span class="underline">Physical types: </span> 
+								<span class="underline">Physical types: </span>
 								{selectedPhysicalTypes.join(', ')}
 							</p>
 							<p class="prose prose-p">
-								<span class="underline">Languages: </span> 
+								<span class="underline">Languages: </span>
 								{selectedLanguages.join(', ')}
 							</p>
 							<p class="prose prose-p">
-								<span class="underline">Religions: </span> 
+								<span class="underline">Religions: </span>
 								{selectedReligions.join(', ')}
 							</p>
 							<p class="prose prose-p">
-								<span class="underline">Materials: </span> 
+								<span class="underline">Materials: </span>
 								{selectedMaterials.join(', ')}
 							</p>
 						</div>
