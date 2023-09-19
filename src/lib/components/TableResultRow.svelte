@@ -9,7 +9,6 @@
 	$: transcription = inscription?.editions?.find(
 		(edition) => edition.edition_type === 'transcription'
 	);
-	$: translation = inscription?.editions?.find((edition) => edition.edition_type === 'translation');
 
 	function formatDate(inscription: Inscription) {
 		if (inscription.not_before === inscription.not_after) {
