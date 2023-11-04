@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import GridIcon from '$lib/components/GridIcon.svelte';
 	import ListResults from '$lib/components/ListResults.svelte';
 	import MapIcon from '$lib/components/MapIcon.svelte';
 

@@ -6,6 +6,8 @@
 
 	const searchParams = $page.url.searchParams;
 
+	$: inscriptionsCount = $page.data.total;
+
 	// we need to shadow the searchParams reactively in order
 	// to properly show changes in the faces without yet applying
 	// the faceted filters to the results
@@ -199,31 +201,25 @@
 
 					<div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
 						<div class="col-span-full">
-							<h3 class="font-semibold underline leading-7 text-stone-700">Applied filters</h3>
-
 							<p class="prose prose-p">
-								<span class="underline">City: </span>
-								{selectedCities.join(', ')}
-							</p>
-							<p class="prose prose-p">
-								<span class="underline">Genres: </span>
-								{selectedGenres.join(', ')}
-							</p>
-							<p class="prose prose-p">
-								<span class="underline">Physical types: </span>
-								{selectedPhysicalTypes.join(', ')}
-							</p>
-							<p class="prose prose-p">
-								<span class="underline">Languages: </span>
-								{selectedLanguages.join(', ')}
-							</p>
-							<p class="prose prose-p">
-								<span class="underline">Religions: </span>
-								{selectedReligions.join(', ')}
-							</p>
-							<p class="prose prose-p">
-								<span class="underline">Materials: </span>
-								{selectedMaterials.join(', ')}
+								{inscriptionsCount} inscriptions<span class:hidden={!textSearch}
+									>; text="{textSearch}"</span
+								><span class:hidden={!descriptionPlaceId}
+									>; description search="{descriptionPlaceId}"</span
+								><span class:hidden={!figures}>; figures search="{figures}"</span><span
+									class:hidden={selectedCities.length === 0}
+									>; cities="{selectedCities.join(', ')}"</span
+								><span class:hidden={selectedGenres.length === 0}
+									>; genres="{selectedGenres.join(', ')}"</span
+								><span class:hidden={selectedPhysicalTypes.length === 0}
+									>; physical types="{selectedPhysicalTypes.join(', ')}"</span
+								><span class:hidden={selectedLanguages.length === 0}
+									>; languages="{selectedLanguages.join(', ')}"</span
+								><span class:hidden={selectedReligions.length === 0}
+									>; religions="{selectedReligions.join(', ')}"</span
+								><span class:hidden={selectedMaterials.length === 0}
+									>; materials="{selectedMaterials.join(', ')}"</span
+								>
 							</p>
 						</div>
 
