@@ -7,7 +7,6 @@ export async function load({ url }) {
     const { items: inscriptions, page, pages } = json;
 
     if (pages > 0 && page > pages) {
-        console.log(page, pages)
         const searchParams = new URLSearchParams(url.search);
 
         searchParams.delete('page');
