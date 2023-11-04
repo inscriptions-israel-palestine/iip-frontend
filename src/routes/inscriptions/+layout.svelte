@@ -1,9 +1,11 @@
 <script lang="ts">
 	import { afterNavigate, goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	import debounce from 'lodash.debounce';
 
 	export let data;
 
+	const TEXT_INPUT_FACETS = new Set(['figures', 'description_place_id', 'text_search']);
 	const searchParams = $page.url.searchParams;
 
 	$: inscriptionsCount = $page.data.total;
@@ -127,30 +129,35 @@
 		facets = data.facets;
 	}
 
-	async function updateFacets(e: Event) {
+	const updateFacets = debounce(async (e: Event) => {
 		if (e?.target instanceof HTMLInputElement) {
 			const facetCategory = e.target.name;
-			const facetId = e.target.value;
-			const isChecked = e.target.checked;
+			const facetValue = e.target.value;
 
-			if (isChecked) {
-				const isFacetApplied = facetParams.getAll(facetCategory).includes(facetId);
-
-				if (!isFacetApplied) {
-					facetParams.append(facetCategory, facetId);
-				}
+			if (TEXT_INPUT_FACETS.has(facetCategory)) {
+				facetParams.set(facetCategory, facetValue);
 			} else {
-				// hopefully eventually, URLSearchParams.delete() will support a `value` attribute.
-				// https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams/delete
-				// until then:
-				const currentValues = facetParams.getAll(facetCategory);
-				const newValues = currentValues.filter((v) => v.toString() != facetId.toString());
+				const isChecked = e.target.checked;
 
-				if (newValues.length === 0) {
-					facetParams.delete(facetCategory);
+				if (isChecked) {
+					const isFacetApplied = facetParams.getAll(facetCategory).includes(facetValue);
+
+					if (!isFacetApplied) {
+						facetParams.append(facetCategory, facetValue);
+					}
 				} else {
-					for (let i = 0, l = newValues.length; i < l; i++) {
-						facetParams.set(facetCategory, newValues[i]);
+					// hopefully eventually, URLSearchParams.delete() will support a `value` attribute.
+					// https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams/delete
+					// until then:
+					const currentValues = facetParams.getAll(facetCategory);
+					const newValues = currentValues.filter((v) => v.toString() != facetValue.toString());
+
+					if (newValues.length === 0) {
+						facetParams.delete(facetCategory);
+					} else {
+						for (let i = 0, l = newValues.length; i < l; i++) {
+							facetParams.set(facetCategory, newValues[i]);
+						}
 					}
 				}
 			}
@@ -165,9 +172,9 @@
 				facetUpdateFunctions[facetCategory]();
 			} catch (_error) {}
 
-			goto(`${$page.url.pathname}?${facetParams.toString()}`, { noScroll: true });
+			goto(`${$page.url.pathname}?${facetParams.toString()}`, { keepFocus: true, noScroll: true });
 		}
-	}
+	}, 300);
 
 	// After a client-side navigation event, we need to update
 	// the shadowed searchParams in `facetParams` in order to
@@ -233,6 +240,7 @@
 								id="text_search"
 								class="input input-bordered input-primary bg-white w-full max-w-xs rounded-none"
 								bind:value={textSearch}
+								on:input={updateFacets}
 							/>
 						</div>
 
