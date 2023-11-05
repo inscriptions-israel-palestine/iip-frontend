@@ -129,7 +129,7 @@
 		facets = data.facets;
 	}
 
-	const updateFacets = debounce(async (e: Event) => {
+	const updateFacets = async (e: Event) => {
 		if (e?.target instanceof HTMLInputElement) {
 			const facetCategory = e.target.name;
 			const facetValue = e.target.value;
@@ -174,7 +174,9 @@
 
 			goto(`${$page.url.pathname}?${facetParams.toString()}`, { keepFocus: true, noScroll: true });
 		}
-	}, 300);
+	};
+
+	const debouncedUpdateFacets = debounce(updateFacets, 300);
 
 	// After a client-side navigation event, we need to update
 	// the shadowed searchParams in `facetParams` in order to
@@ -240,7 +242,7 @@
 								id="text_search"
 								class="input input-bordered input-primary bg-white w-full max-w-xs rounded-none"
 								bind:value={textSearch}
-								on:input={updateFacets}
+								on:input={debouncedUpdateFacets}
 							/>
 						</div>
 
@@ -254,6 +256,7 @@
 								id="description_place_id"
 								class="input input-bordered input-primary bg-white w-full max-w-xs rounded-none"
 								bind:value={descriptionPlaceId}
+								on:input={debouncedUpdateFacets}
 							/>
 						</div>
 
@@ -268,6 +271,7 @@
 								id="figures"
 								class="input input-bordered input-primary bg-white w-full max-w-xs rounded-none"
 								bind:value={figures}
+								on:input={debouncedUpdateFacets}
 							/>
 						</div>
 
@@ -283,6 +287,7 @@
 									id="not_before"
 									class="input input-bordered input-primary bg-white w-24 rounded-none"
 									bind:value={notBefore}
+									on:input={debouncedUpdateFacets}
 								/>
 								<div class="form-control">
 									<label class="label" for="not_before_era_0"
@@ -293,6 +298,7 @@
 											value="bce"
 											id="not_before_era_0"
 											bind:group={notBeforeEra}
+											on:change={updateFacets}
 										/>
 										<span class="label-text cursor-pointer">BCE</span></label
 									>
@@ -306,6 +312,7 @@
 											value="ce"
 											id="not_before_era_1"
 											bind:group={notBeforeEra}
+											on:change={updateFacets}
 										/>
 										<span class="label-text cursor-pointer">CE</span></label
 									>
@@ -325,6 +332,7 @@
 									id="not_after"
 									class="input input-bordered input-primary bg-white w-24 rounded-none"
 									bind:value={notAfter}
+									on:input={debouncedUpdateFacets}
 								/>
 								<div class="form-control">
 									<label class="label" for="not_after_era_0"
@@ -335,6 +343,7 @@
 											value="bce"
 											id="not_after_era_0"
 											bind:group={notAfterEra}
+											on:change={updateFacets}
 										/>
 										<span class="label-text cursor-pointer">BCE</span></label
 									>
@@ -348,6 +357,7 @@
 											value="ce"
 											id="not_after_era_1"
 											bind:group={notAfterEra}
+											on:change={updateFacets}
 										/>
 										<span class="label-text cursor-pointer">CE</span></label
 									>
