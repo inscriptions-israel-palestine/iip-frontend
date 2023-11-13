@@ -6,6 +6,13 @@
 	export let data;
 
 	const TEXT_INPUT_FACETS = new Set(['figures', 'description_place_id', 'text_search']);
+	const TOGGLES = new Set([
+		'not_after_era',
+		'not_before_era',
+		'languages_boolean',
+		'materials_boolean',
+		'physical_types_boolean'
+	]);
 	const searchParams = $page.url.searchParams;
 
 	$: inscriptionsCount = $page.data.total;
@@ -22,12 +29,15 @@
 	$: figures = searchParams.get('figures');
 	$: genres = searchParams.getAll('genres');
 	$: languages = searchParams.getAll('languages');
+	$: languagesBoolean = searchParams.get('languages_boolean') || 'and';
 	$: materials = searchParams.getAll('materials');
+	$: materialsBoolean = searchParams.get('materials_boolean') || 'and';
 	$: notAfter = searchParams.get('not_after');
 	$: notAfterEra = searchParams.get('not_after_era') || 'bce';
 	$: notBefore = searchParams.get('not_before');
 	$: notBeforeEra = searchParams.get('not_before_era') || 'bce';
 	$: physicalTypes = searchParams.getAll('physical_types');
+	$: physicalTypesBoolean = searchParams.get('physical_types_boolean') || 'and';
 	$: regions = searchParams.getAll('regions');
 	$: religions = searchParams.getAll('religions');
 	$: textSearch = searchParams.get('text_search');
@@ -111,12 +121,15 @@
 		figures = '';
 		genres = [];
 		languages = [];
+		languagesBoolean = 'and';
 		materials = [];
+		materialsBoolean = 'and';
 		notAfter = null;
 		notAfterEra = 'bce';
 		notBefore = null;
 		notBeforeEra = 'bce';
 		physicalTypes = [];
+		physicalTypesBoolean = 'and';
 		regions = [];
 		religions = [];
 		textSearch = '';
@@ -134,7 +147,7 @@
 			const facetCategory = e.target.name;
 			const facetValue = e.target.value;
 
-			if (TEXT_INPUT_FACETS.has(facetCategory)) {
+			if (TEXT_INPUT_FACETS.has(facetCategory) || TOGGLES.has(facetCategory)) {
 				facetParams.set(facetCategory, facetValue);
 			} else {
 				const isChecked = e.target.checked;
@@ -368,9 +381,7 @@
 
 					<div class="divider" />
 
-					<div
-						class={`font-small collapse collapse-arrow ${cities.length > 0 ? 'collapse-open' : ''}`}
-					>
+					<div class="font-small collapse collapse-arrow" class:collapse-open={cities.length > 0}>
 						<input type="checkbox" />
 						<div class="collapse-title font-medium">Location</div>
 						<div class="collapse-content">
@@ -411,9 +422,7 @@
 
 					<div class="divider" />
 
-					<div
-						class={`font-small collapse collapse-arrow ${genres.length > 0 ? 'collapse-open' : ''}`}
-					>
+					<div class="font-small collapse collapse-arrow" class:collapse-open={genres.length > 0}>
 						<input type="checkbox" />
 						<div class="collapse-title font-medium">Type of Inscription</div>
 						<div class="collapse-content">
@@ -443,13 +452,40 @@
 					<div class="divider" />
 
 					<div
-						class={`font-small collapse collapse-arrow ${
-							physicalTypes.length > 0 ? 'collapse-open' : ''
-						}`}
+						class="font-small collapse collapse-arrow"
+						class:collapse-open={physicalTypes.length > 0}
 					>
 						<input type="checkbox" />
 						<div class="collapse-title font-medium">Physical Type</div>
 						<div class="collapse-content">
+							<div class="form-control hidden">
+								<label class="label" for="physical_types_boolean_0"
+									><input
+										type="radio"
+										class="radio h-4 w-4 mr-1"
+										name="physical_types_boolean"
+										value="and"
+										id="physical_types_boolean_0"
+										bind:group={physicalTypesBoolean}
+										on:change={updateFacets}
+									/>
+									<span class="label-text cursor-pointer">AND</span></label
+								>
+							</div>
+							<div class="hidden">
+								<label class="label" for="physical_types_boolean_1"
+									><input
+										type="radio"
+										class="radio h-4 w-4 mr-1"
+										name="physical_types_boolean"
+										value="or"
+										id="physical_types_boolean_1"
+										bind:group={physicalTypesBoolean}
+										on:change={updateFacets}
+									/>
+									<span class="label-text cursor-pointer">OR</span></label
+								>
+							</div>
 							<div class="border border-stone-300 p-4 rounded h-48 overflow-y-auto">
 								{#each facets.physical_types as [physicalType, inscriptionsCount]}
 									<div class="form-control">
@@ -478,9 +514,8 @@
 					<div class="divider" />
 
 					<div
-						class={`font-small collapse collapse-arrow ${
-							languages.length > 0 ? 'collapse-open' : ''
-						}`}
+						class="font-small collapse collapse-arrow"
+						class:collapse-open={languages.length > 0}
 					>
 						<input type="checkbox" />
 						<div class="collapse-title font-medium">Language</div>
@@ -511,9 +546,8 @@
 					<div class="divider" />
 
 					<div
-						class={`font-small collapse collapse-arrow ${
-							religions.length > 0 ? 'collapse-open' : ''
-						}`}
+						class="font-small collapse collapse-arrow"
+						class:collapse-open={religions.length > 0}
 					>
 						<input type="checkbox" />
 						<div class="collapse-title font-medium">Religion</div>
@@ -544,9 +578,8 @@
 					<div class="divider" />
 
 					<div
-						class={`font-small collapse collapse-arrow ${
-							materials.length > 0 ? 'collapse-open' : ''
-						}`}
+						class="font-small collapse collapse-arrow"
+						class:collapse-open={materials.length > 0}
 					>
 						<input type="checkbox" />
 						<div class="collapse-title font-medium">Material</div>
