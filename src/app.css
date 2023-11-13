@@ -9,3 +9,8 @@
 * {
     font-family: 'Open Sans', 'Helvetica Neue', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, Arial, sans-serif;
 }
+
+.mapboxgl-popup-content.mapboxgl-popup-content {
+    padding-bottom: 0;
+    padding-right: 0;
+}

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Inscription } from '$lib/types/inscription.type';
-	import type { MapLayerMouseEvent } from 'mapbox-gl';
+	import type { GeoJSONSource, MapBoxZoomEvent, MapLayerMouseEvent } from 'mapbox-gl';
 
 	import { env } from '$env/dynamic/public';
 	import mapboxgl from 'mapbox-gl';
@@ -36,6 +36,49 @@
 		return map;
 	}
 
+	function handleClusterLayerClck(e: MapLayerMouseEvent) {
+		const features = map.queryRenderedFeatures(e.point, {
+			layers: ['clusters']
+		});
+
+		const feature = features[0];
+		const clusterId = feature.properties?.cluster_id;
+		const pointCount = feature.properties?.point_count;
+
+		// @ts-expect-error
+		const coordinates = feature.geometry?.coordinates.slice();
+		const clusterSource = map.getSource(SOURCE_NAME) as GeoJSONSource;
+
+		clusterSource.getClusterLeaves(clusterId, pointCount, 0, (error, features) => {
+			if (error) {
+				console.error(error);
+			}
+			const inscriptions = features
+				.sort((a, b) => (a.properties?.title > b.properties?.title ? 1 : -1))
+				.map(
+					(feature) =>
+						`<li><a class="text-stone hover:text-zinc hover:underline" href="/inscriptions/${feature.properties?.filename.replace(
+							'.xml',
+							''
+						)}">${feature.properties?.title}</a></li>`
+				);
+
+			new mapboxgl.Popup({ closeButton: false })
+				.setLngLat(coordinates)
+				.setHTML(
+					`
+						<div class="overflow-y-auto max-h-64">
+							<h3 class="prose prose-stone prose-h3">Inscriptions</h3>
+							<ul class="list-disc list-inside">
+								${inscriptions.join('\n')}
+							</ul>
+						</div>
+					`
+				)
+				.addTo(map);
+		});
+	}
+
 	function handleUnclusteredClick(e: MapLayerMouseEvent) {
 		// @ts-expect-error
 		const feature = e.features[0];
@@ -44,7 +87,7 @@
 
 		const properties = feature.properties as Inscription;
 
-		new mapboxgl.Popup()
+		new mapboxgl.Popup({ closeButton: false })
 			.setLngLat(coordinates)
 			.setHTML(
 				`
@@ -140,6 +183,8 @@
 		// description HTML from its properties.
 		map.on('click', UNCLUSTERED_LAYER, handleUnclusteredClick);
 
+		map.on('click', CLUSTER_LAYER, handleClusterLayerClck);
+
 		map.on('mouseenter', CLUSTER_LAYER, () => {
 			map.getCanvas().style.cursor = 'pointer';
 		});
@@ -213,10 +258,7 @@
 </script>
 
 <div class="flex w-full h-full max-h-screen">
-	<div
-		class="absolute h-screen w-3/4 md:w-full right-0 bg-theme-700 text-white"
-		bind:this={mapContainer}
-	/>
+	<div class="absolute h-screen w-3/4 md:w-full right-0 bg-theme-700" bind:this={mapContainer} />
 	{#if map}
 		<MapOverlays {map} />
 	{/if}
@@ -226,6 +268,6 @@
 		title="0"
 		id="loader"
 	>
-		<span class="loading loading-spinner loading-lg"></span>
+		<span class="loading loading-spinner loading-lg" />
 	</div>
 </div>
