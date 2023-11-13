@@ -48,7 +48,11 @@
 	}
 
 	function getTodayString() {
-		return new Date().toLocaleDateString(['en-GB', 'en-US'], { day: 'numeric', month: 'long', year: 'numeric' });
+		return new Date().toLocaleDateString(['en-GB', 'en-US'], {
+			day: 'numeric',
+			month: 'long',
+			year: 'numeric'
+		});
 	}
 
 	beforeUpdate(async () => {
@@ -74,9 +78,48 @@
 	<div
 		class="mx-auto grid max-w-2xl grid-cols-1 grid-rows-1 items-start gap-x-8 gap-y-8 lg:mx-0 lg:max-w-none lg:grid-cols-3"
 	>
-		<!-- Maplet -->
+		<div>
+			<h3 class="font-semibold prose prose-stone">Images</h3>
+			<div class="mt-2">
+				{#if inscription.images && inscription.images.length > 0}
+					<ul role="list" class="mt-6 space-y-6">
+						{#each inscription.images as image (image.id)}
+							<li class="relative flex gap-x-4">
+								<div
+									class="relative flex h-64 w-64 flex-none items-center justify-center mt-8 bg-white"
+								>
+									<a
+										href={image.graphic_url}
+										class="block w-full cursor-zoom-in opacity-100 hover:opacity-80 transition-opacity"
+										title={image.description || 'An image of the inscription.'}
+									>
+										<img
+											class="object-contain h-72"
+											src={image.graphic_url}
+											alt={image.description}
+											title="Click to view"
+										/>
+										<p class="caption-bottom prose prose-p prose-stone">
+											{image.description || ''}
+										</p>
+									</a>
+								</div>
+							</li>
+						{/each}
+					</ul>
+				{:else}
+					<img
+						class="w-full object-contain"
+						style="max-height:66vh"
+						src="/img/iip_placeholder.png"
+						alt="No images available"
+						title="Click to view"
+					/>
+				{/if}
+			</div>
+		</div>
 		{#if inscription.location_coordinates}
-			<div class="lg:col-start-3 lg:row-end-1">
+			<div>
 				<h2 class="sr-only">Location</h2>
 				<div
 					class="rounded-lg bg-gray-50 shadow-sm ring-1 ring-gray-900/5 min-h-64 min-w-64 h-64 min-w-64 w-full"
@@ -164,7 +207,7 @@
 			</table>
 			<dl class="mt-6 grid grid-cols-1 text-sm leading-6 sm:grid-cols-2">
 				<div class="sm:pr-4">
-					<dt class="inline prose prose-stone">Terminus post quem</dt>
+					<dt class="inline prose prose-stone">Terminus post quem:</dt>
 					<dd class="inline prose prose-stone">
 						<time datetime={inscription.not_before}
 							>{Math.abs(inscription.not_before)} {inscription.not_before < 0 ? 'BCE' : 'CE'}</time
@@ -172,7 +215,7 @@
 					</dd>
 				</div>
 				<div class="mt-2 sm:mt-0 sm:pl-4">
-					<dt class="inline prose prose-stone">Terminus ante quem</dt>
+					<dt class="inline prose prose-stone">Terminus ante quem:</dt>
 					<dd class="inline prose prose-stone">
 						<time datetime={inscription.not_after}
 							>{Math.abs(inscription.not_after)} {inscription.not_after < 0 ? 'BCE' : 'CE'}</time
@@ -183,126 +226,82 @@
 					<dt class="font-semibold prose prose-stone">Summary</dt>
 					<dd class="mt-2 prose prose-stone">{inscription.description || ''}</dd>
 				</div>
-
-				<div class="mt-6 border-t pt-6 sm:pr-4 w-full">
-					<dt class="font-semibold prose prose-stone">Images</dt>
-					<dd class="mt-2">
-						{#if inscription.images && inscription.images.length > 0}
-							<ul role="list" class="mt-6 space-y-6">
-								{#each inscription.images as image (image.id)}
-									<li class="relative flex gap-x-4">
-										<div
-											class="relative flex h-64 w-64 flex-none items-center justify-center mt-8 bg-white"
-										>
-											<a
-												href={image.graphic_url}
-												class="block w-full cursor-zoom-in opacity-100 hover:opacity-80 transition-opacity"
-												title={image.description || 'An image of the inscription.'}
-											>
-												<img
-													class="object-contain h-72"
-													src={image.graphic_url}
-													alt={image.description}
-													title="Click to view"
-												/>
-												<p class="caption-bottom prose prose-p prose-stone">
-													{image.description || ''}
-												</p>
-											</a>
-										</div>
-									</li>
-								{/each}
-							</ul>
-						{:else}
-							<img
-								class="w-full object-contain"
-								style="max-height:66vh"
-								src="/img/iip_placeholder.png"
-								alt="No images available"
-								title="Click to view"
-							/>
-						{/if}
-					</dd>
-				</div>
 			</dl>
 		</div>
-
-		<div class="lg:col-start-3">
-			<div class="py-3">
-				<h2 class="font-semibold leading-6 prose prose-stone prose-h2 mb-3">Current location</h2>
-				{#if inscription.provenance?.placename}
-					<p class="flex-auto py-0.5 text-xs leading-5 prose prose-stone prose-p">
-						{inscription.provenance.placename}
-					</p>
-				{:else}
-					<p class="flex-auto py-0.5 text-xs leading-5 prose prose-stone prose-p">
-						No provenance provided.
-					</p>
-				{/if}
-			</div>
-			<div class="py-3">
-				<h2 class="font-semibold leading-6 prose prose-stone prose-h2 mb-3">Figures</h2>
-				{#if inscription.figures.length > 0}
-					<ul role="list" class="mt-6 space-y-6">
-						{#each inscription.figures as figure}
-							<li class="relative flex gap-x-4">
-								<p class="flex-auto py-0.5 text-xs leading-5 prose prose-stone prose-p">
-									<span class="font-medium prose prose-stone">{figure.name}</span>
-									{figure.locus}
-								</p>
-							</li>
-						{/each}
-					</ul>
-				{:else}
-					<p class="flex-auto py-0.5 text-xs leading-5 prose prose-stone prose-p">
-						No figures described.
-					</p>
-				{/if}
-			</div>
-			<div class="py-3">
-				<h2 class="font-semibold leading-6 prose prose-stone prose-h2 mb-3">Bibliography</h2>
-				{#if zoteroItems.length > 0}
-					<ul role="list">
-						{#each zoteroItems as item}
-							<li class="relative flex gap-x-4 pb-4">
-								<ZoteroItem item={item} />
-							</li>
-						{/each}
-					</ul>
-				{:else}
-					<p class="flex-auto text-xs prose prose-stone prose-p">No bibliography available.</p>
-				{/if}
-			</div>
-
-			<div class="py-3 space-y-3">
-				<h2 class="font-semibold leading-6 prose prose-stone prose-h2 mb-3">
-					Cite This Inscription
-				</h2>
-
-				<p class="prose prose-p prose-stone">
-					IIP is committed to the idea that the public good is best served by keeping our data free
-					for use and reuse. You can cite and use this inscription under the terms of the Creative
-					Commons Attribution-NonCommercial 4.0 International License. Note also that all images are
-					either in the public domain or used with permission, and unless noted we do not hold
-					copyright to them. For permission to reuse the images, please contact the copyright
-					holder, noted in the illustration credit.
+	</div>
+	<div class="bg-stone-200 rounded my-4 px-8 flex justify-between">
+		<div class="py-3">
+			<h2 class="font-semibold prose prose-stone prose-h2 mb-3">Current location</h2>
+			{#if inscription.provenance?.placename}
+				<p class="flex-auto py-0.5 text-xs leading-5 prose prose-stone prose-p">
+					{inscription.provenance.placename}
 				</p>
-
-				<p class="prose prose-p prose-stone">The project can be cited as:</p>
-
-				<cite class="prose prose-p prose-stone">
-					Satlow, Michael L., ed. 2002 - . “Inscriptions of Israel/Palestine.” Brown University. <a
-						href="https://doi.org/10.26300/PZ1D-ST89">https://doi.org/10.26300/PZ1D-ST89</a
-					>
-				</cite>
-
-				<p class="prose prose-p prose-stone">This inscription can be cited as:</p>
-
-				<cite class="prose prose-p prose-stone">
-					"Inscriptions of Israel/Palestine," {inscription.filename.replace('.xml', '').toUpperCase()}, {getTodayString()}.
-					https:doi.org/10.26300/pz1d-st89
-				</cite>
-			</div>
+			{:else}
+				<p class="flex-auto py-0.5 text-xs leading-5 prose prose-stone prose-p">
+					No provenance provided.
+				</p>
+			{/if}
 		</div>
+		<div class="py-3">
+			<h2 class="font-semibold prose prose-stone prose-h2 mb-3">Figures</h2>
+			{#if inscription.figures.length > 0}
+				<ul role="list" class="space-y-6">
+					{#each inscription.figures as figure}
+						<li class="relative flex gap-x-4">
+							<p class="flex-auto py-0.5 text-xs leading-5 prose prose-stone prose-p">
+								<span class="font-medium prose prose-stone"
+									>{figure.name} {figure.locus.toLowerCase()}</span
+								>
+							</p>
+						</li>
+					{/each}
+				</ul>
+			{:else}
+				<p class="flex-auto py-0.5 text-xs leading-5 prose prose-stone prose-p">
+					No figures described.
+				</p>
+			{/if}
+		</div>
+		<div class="py-3">
+			<h2 class="font-semibold prose prose-stone prose-h2 mb-3">Bibliography</h2>
+			{#if zoteroItems.length > 0}
+				<ul role="list">
+					{#each zoteroItems as item}
+						<li class="relative flex gap-x-4 pb-4">
+							<ZoteroItem {item} />
+						</li>
+					{/each}
+				</ul>
+			{:else}
+				<p class="flex-auto text-xs prose prose-stone prose-p">No bibliography available.</p>
+			{/if}
+		</div>
+	</div>
+	<div class="py-3 space-y-3">
+		<h2 class="font-semibold leading-6 prose prose-stone prose-h2 mb-3">Cite This Inscription</h2>
+
+		<p class="text-stone-500">
+			IIP is committed to the idea that the public good is best served by keeping our data free for
+			use and reuse. You can cite and use this inscription under the terms of the Creative Commons
+			Attribution-NonCommercial 4.0 International License. Note also that all images are either in
+			the public domain or used with permission, and unless noted we do not hold copyright to them.
+			For permission to reuse the images, please contact the copyright holder, noted in the
+			illustration credit.
+		</p>
+
+		<p class="prose prose-p prose-stone">The project can be cited as:</p>
+
+		<cite class="prose prose-p prose-stone">
+			Satlow, Michael L., ed. 2002 - . “Inscriptions of Israel/Palestine.” Brown University. <a
+				href="https://doi.org/10.26300/PZ1D-ST89">https://doi.org/10.26300/PZ1D-ST89</a
+			>
+		</cite>
+
+		<p class="prose prose-p prose-stone">This inscription can be cited as:</p>
+
+		<cite class="prose prose-p prose-stone">
+			"Inscriptions of Israel/Palestine," {inscription.filename.replace('.xml', '').toUpperCase()}, {getTodayString()}.
+			https:doi.org/10.26300/pz1d-st89
+		</cite>
 	</div>
 </div>
