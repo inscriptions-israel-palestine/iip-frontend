@@ -134,12 +134,34 @@
 		religions = [];
 		textSearch = '';
 
-		goto($page.url.pathname);
+		await goto($page.url.pathname);
 
 		const response = await fetch(`/facets?${facetParams.toString()}`);
 		const data = await response.json();
 
 		facets = data.facets;
+		selectedCities = [];
+		selectedGenres = [];
+		selectedLanguages = [];
+		selectedMaterials = [];
+		selectedPhysicalTypes = [];
+		selectedReligions = [];
+	}
+
+	function toggleFacet(facetCategory: string, facetValue: string) {
+		// hopefully eventually, URLSearchParams.delete() will support a `value` attribute.
+		// https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams/delete
+		// until then:
+		const currentValues = facetParams.getAll(facetCategory);
+		const newValues = currentValues.filter((v) => v.toString() != facetValue.toString());
+
+		if (newValues.length === 0) {
+			facetParams.delete(facetCategory);
+		} else {
+			for (let i = 0, l = newValues.length; i < l; i++) {
+				facetParams.set(facetCategory, newValues[i]);
+			}
+		}
 	}
 
 	const updateFacets = async (e: Event) => {
@@ -148,7 +170,7 @@
 			const facetValue = e.target.value;
 
 			if (TEXT_INPUT_FACETS.has(facetCategory) || TOGGLES.has(facetCategory)) {
-				facetParams.set(facetCategory, facetValue);
+				toggleFacet(facetCategory, facetValue);
 			} else {
 				const isChecked = e.target.checked;
 
@@ -159,19 +181,7 @@
 						facetParams.append(facetCategory, facetValue);
 					}
 				} else {
-					// hopefully eventually, URLSearchParams.delete() will support a `value` attribute.
-					// https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams/delete
-					// until then:
-					const currentValues = facetParams.getAll(facetCategory);
-					const newValues = currentValues.filter((v) => v.toString() != facetValue.toString());
-
-					if (newValues.length === 0) {
-						facetParams.delete(facetCategory);
-					} else {
-						for (let i = 0, l = newValues.length; i < l; i++) {
-							facetParams.set(facetCategory, newValues[i]);
-						}
-					}
+					toggleFacet(facetCategory, facetValue);
 				}
 			}
 
