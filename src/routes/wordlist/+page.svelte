@@ -7,9 +7,40 @@
 	$: words = allWords.lemmas;
 	$: doubletree_data: JSON.stringify(allWords.db_list);
 
-	function filterByPos() {
+/*	function filterByPos() {
 		console.log('filtering');
-	}
+	}*/
+	
+    function posFilter() {
+      const checked = new Set();
+      const posFilterCheckboxes = document.querySelectorAll('.pos-filter');
+      const latinPosTable = document.getElementById('latin-pos-table');
+
+      posFilterCheckboxes.forEach((obj) => {
+        if (obj.checked) {
+          checked.add(obj.value);
+        }
+      });
+	    const noCheck = checked.size == 0
+	    var table = document.getElementById("latin-pos-table")
+	    var hiding = false
+	    for(var r = 0, row; row = table.rows[r]; r++) {
+		    if(row.classList.contains('level0')) {
+			    const rowHTML = row.innerHTML
+			    const ind = rowHTML.indexOf("</span>")
+			    const pos = rowHTML.substring(ind + 8, rowHTML.indexOf(" ", ind + 9))
+			    if(noCheck || checked.has(pos)) {
+				    row.style.display = '';
+				    hiding = false;
+			    } else {
+				    row.style.display = 'none';
+				    hiding = true;
+			    }
+		    } else if (hiding) {
+			    row.style.display = 'none';
+		    }
+	    }
+    }
 </script>
 
 <div class="container mx-auto">
@@ -41,7 +72,7 @@
 				<input class="form-check-input pos-filter" type="checkbox" value="CC" id="cccheck" />
 				<label class="form-check-label" for="cccheck"> Conjunction </label>
 			</div>
-			<button type="submit" on:click={filterByPos} class="btn btn-primary mb-2">Submit</button>
+			<button type="submit" on:click={posFilter} class="btn btn-primary mb-2">Submit</button>
 		</div>
 	</div>
 
