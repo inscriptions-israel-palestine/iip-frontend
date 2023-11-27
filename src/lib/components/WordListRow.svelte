@@ -4,13 +4,15 @@
 	import TreeIcon from './TreeIcon.svelte';
 
 	export let word: WordListWord;
-	/*export let id;*/
+	export let id;
 
 	$: isExpanded = false;
 	$: isTreeShown = false;
 
 	function toggleIsExpanded(_e: Event) {
 		isExpanded = !isExpanded;
+		const button = document.getElementById(`button${id}`);
+        button.textContent = isExpanded ? "-" : "+";
 	}
 
 	function toggleIsTreeShown(_e: Event) {
@@ -20,7 +22,7 @@
 
 <tr class={`level0 pos${word.pos}`}>
 	<td colspan="2">
-		<button type="button" id="button" class="btn btn-primary" on:click={toggleIsExpanded}>+</button>
+		<button type="button" id="button{id}" class="btn btn-primary" on:click={toggleIsExpanded}>+</button>
 		<span class="font-bold">{word.lemma}</span>
 		{word.pos} ({word.count})
 		<a

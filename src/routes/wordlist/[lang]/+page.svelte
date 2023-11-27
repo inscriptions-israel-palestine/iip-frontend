@@ -80,9 +80,9 @@
 	<table id="latin-pos-table" class="table-auto">
 	<!-- FIXME: The page displays with ids as desired, but I'm getting an error that reads as follows: "Error: Cannot have duplicate keys in a keyed each: Keys at index 0 and 1 with value 'undefined' are duplicates" -->
 		<!--{#each words as word, index (word.id)}-->
-		{#each words as word}
+		{#each words as word, index}
 			<!--WordListRow {word} id={index + 1}/-->
-			<WordListRow {word}/>
+			<WordListRow {word} id={index+1}/>
 		{/each}
 	</table>
 </div>
