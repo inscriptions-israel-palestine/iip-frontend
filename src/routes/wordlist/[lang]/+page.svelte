@@ -41,10 +41,30 @@
 			    row.style.display = 'none';
 		    }
 	    }
-    }
+    };
+    // Function to extract unique starting letters from words
+    function getUniqueStartingLetters() {
+        const startingLetters = new Set();
+        words.forEach(word => {
+        const firstLetter = word.lemma.normalize('NFD')[0]
+        if (typeof firstLetter !== "undefined") {
+            const lowerCaseChar = firstLetter.toLowerCase();
+            startingLetters.add(lowerCaseChar);
+        }
+        });
+        return Array.from(startingLetters).sort();
+    };
 </script>
 
 <div class="container mx-auto">
+    <p align="center" id="atoz">
+      {#each getUniqueStartingLetters() as letter, index}
+        {#if words.some(word => word.lemma.toLowerCase().startsWith(letter))}
+          {#if index !== 0}&nbsp;|{/if}
+          <a class="alphalink" on:click={(e) => alphaClick(e, letter)}>{letter}</a>
+        {/if}
+      {/each}
+    </p>
 	<div id="posfilter" class="flex justify-center">
 		<!-- FIXME: For accessibility and development ease, this should be a proper form. -->
 		<div class="form-group">
