@@ -1,6 +1,6 @@
 import { env } from '$env/dynamic/public'
 
-export async function load({ params }) {
+/*export async function load({ params }) {
     const subpageMap = {
         latin: 'latin',
         greek: 'greek',
@@ -16,6 +16,13 @@ export async function load({ params }) {
         };
     }
     const response = await fetch(`${env.PUBLIC_API_URL}/wordlist/${selectedLang}`);
+    const wordlist = await response.json();
+
+    return { words: wordlist };
+}*/
+
+export async function load() {
+    const response = await fetch(`${env.PUBLIC_API_URL}/wordlist/hebrew`);
     const wordlist = await response.json();
 
     return { words: wordlist };

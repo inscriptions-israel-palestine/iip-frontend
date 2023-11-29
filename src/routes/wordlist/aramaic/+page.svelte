@@ -56,7 +56,10 @@
     };
 </script>
 
-<div class="container mx-auto">
+<div class="container text-left">
+
+    <div class="floating-menu">
+    
     <p align="center" id="atoz">
       {#each getUniqueStartingLetters() as letter, index}
         {#if words.some(word => word.lemma.toLowerCase().startsWith(letter))}
@@ -65,6 +68,7 @@
         {/if}
       {/each}
     </p>
+    
 	<div id="posfilter" class="flex justify-center">
 		<!-- FIXME: For accessibility and development ease, this should be a proper form. -->
 		<div class="form-group">
@@ -96,13 +100,25 @@
 			<button type="submit" on:click={posFilter} class="btn btn-primary mb-2">Submit</button>
 		</div>
 	</div>
+	</div>
+	
+	
+	
+	<p id="lang-select" align="justify" style="padding-left: 200px; padding-right: 80px;">
+<span class="italic">Select language:</span> <a href="/wordlist/latin">Latin</a> | <a href="/wordlist/greek">Greek</a> | <a href="/wordlist/hebrew">Hebrew</a> | <span class="font-bold">Aramaic</span>
+    </p>
+    <h2 class="font-semibold leading-6 prose prose-h2 prose-stone prose-2xl" style="padding: 20px; padding-left: 200px">Wordlists</h2>
+    
+    <p align="justify" style="padding-left: 200px; padding-right: 80px;">The following is the wordlist of Aramaic in the Inscriptions of Israel/Palestine. The list presents each headword, its part of speech, and the number of times that word appears in the corpus. To see each of the specific morphological forms, click on the blue button next to the headword. You will be presented with a list of word forms, their morphological data, and counts of their appearances in the IIP corpus. This display will also show keyword-in-context views, presenting the contexts in which these words appear.
+    <br><br>
+This wordlist provides links to the Comprehensive Aramaic Lexicon, indicated with the dictionary (<img class="sample-icons" src="/img/dictionary.png"/>) icon. In addition, it presents Double Tree KWIC visualizations as another lens into the contexts in which these words appear. To view the Double Tree visualization for any word, click the tree (<img class="sample-icons" src="/img/tree-icon.png"/>) icon.<br><br></p>
 
-	<table id="latin-pos-table" class="table-auto">
-	<!-- FIXME: The page displays with ids as desired, but I'm getting an error that reads as follows: "Error: Cannot have duplicate keys in a keyed each: Keys at index 0 and 1 with value 'undefined' are duplicates" -->
-		<!--{#each words as word, index (word.id)}-->
+<div class="container text-left" style="padding-left: 200px;">
+
+	<table id="latin-pos-table" class="table-auto" width="100%">
 		{#each words as word, index}
-			<!--WordListRow {word} id={index + 1}/-->
-			<WordListRow {word} id={index+1}/>
+			<WordListRow {word} id={index+1} language='aramaic' />
 		{/each}
 	</table>
+</div>
 </div>

@@ -4,6 +4,7 @@
 	import TreeIcon from './TreeIcon.svelte';
 
 	export let word: WordListWord;
+	export let language;
 	export let id;
 
 	$: isExpanded = false;
@@ -18,6 +19,19 @@
 	function toggleIsTreeShown(_e: Event) {
 		isTreeShown = !isTreeShown;
 	}
+	
+  function getDictionary(language, lemma) {
+    switch (language) {
+      case 'latin':
+        return `http://www.perseus.tufts.edu/hopper/resolveform?type=exact&lookup=${lemma}&lang=la`;
+      case 'greek':
+        return `https://www.perseus.tufts.edu/hopper/morph?l=${lemma}&la=greek`;
+      case 'hebrew':
+        return `https://en.wiktionary.org/wiki/${lemma}#Hebrew`;
+      case 'aramaic':
+        return `https://cal.huc.edu/browseSKEYheaders.php?tools=on&first3=${lemma.slice(0, 3)}`;
+    }
+  }
 </script>
 
 <tr class={`level0 pos${word.pos}`}>
@@ -25,11 +39,11 @@
 		<button type="button" id="button{id}" class="btn btn-primary" on:click={toggleIsExpanded}>+</button>
 		<span class="font-bold">{word.lemma}</span>
 		{word.pos} ({word.count})
-		<a
-			href={`http://www.perseus.tufts.edu/hopper/resolveform?type=exact&lookup=${word.lemma}&lang=la`}
-			target="_blank"><BookIcon />
-			<!--img class="dictionary-icon" style="height: 20px; display: inline;" src='https://raw.githubusercontent.com/cmroughan/iip-production/wordlists2023/iip_smr_web_app/static/wordlist/dictionary.png'/--></a>
-		<button class="tree-icon" on:click={toggleIsTreeShown}><TreeIcon /></button>
+		<br>
+		<a href={getDictionary(language, word.lemma)} target="_blank">
+		    <img class="dictionary-icon" src="/img/dictionary.png" alt="Dictionary icon"/>
+		</a> 
+		<img class="tree-icon" src="/img/tree-icon.png"/>
 	</td>
 </tr>
 
@@ -38,23 +52,24 @@
         {#each form.kwics as kwic, index}
         {#if (index == 0)}
             <tr class="level1 tog">
-            <td rowspan={form.count} class="formentry" style="vertical-align:top">
+            <td rowspan={form.count} class="formentry" style="vertical-align:top;">
                 {form.form}
                 <br>
                             ↳ {form.pos} ({form.count})
             </td>
-            <td>
-                {kwic[0][0]} <b>{kwic[0][1]}</b> {kwic[0][2]} (<a href="https://iip-dev.us.reclaim.cloud/inscriptions/{kwic[1]}">{kwic[1]}</a>)
+            <td style="vertical-align:top">
+                {kwic[0][0]} <b>{kwic[0][1]}</b> {kwic[0][2]} (<a href="/inscriptions/{kwic[1]}" style="color: grey">{kwic[1]}</a>)
             </td>
             </tr>
         {:else}
             <tr class="level1 tog">
             <td>
-                {kwic[0][0]} <b>{kwic[0][1]}</b> {kwic[0][2]} (<a href="https://iip-dev.us.reclaim.cloud/inscriptions/{kwic[1]}">{kwic[1]}</a>)
+                {kwic[0][0]} <b>{kwic[0][1]}</b> {kwic[0][2]} (<a href="/inscriptions/{kwic[1]}" style="color: grey">{kwic[1]}</a>)
             </td>
             </tr>
         {/if}
         {/each}
+        <tr>&nbsp;</tr>
     {/each}
 {/if}
 
