@@ -110,7 +110,7 @@
     <h2 class="font-semibold leading-6 prose prose-h2 prose-stone prose-2xl" style="padding: 20px; padding-left: 200px">Wordlists</h2>
     
     <p align="justify" style="padding-left: 200px; padding-right: 80px;">
-The following is the wordlist of Latin in the Inscriptions of Israel/Palestine. The list presents each headword, its part of speech, and the number of times that word appears in the corpus. To see each of the specific morphological forms, click on the blue button next to the headword. You will be presented with a list of word forms, their morphological data, and counts of their appearances in the IIP corpus. This display will also show keyword-in-context views, presenting the contexts in which these words appear.
+The following is the wordlist of Latin in the Inscriptions of Israel/Palestine. The list presents each headword, its part of speech, and the number of times that word appears in the corpus. To see each of the specific morphological forms, click on the brown button next to the headword. You will be presented with a list of word forms, their morphological data, and counts of their appearances in the IIP corpus. This display will also show keyword-in-context views, presenting the contexts in which these words appear.
     <br><br>
 This wordlist provides links to the Perseus Latin dictionary, indicated with the dictionary (<img class="sample-icons" src="/img/dictionary.png"/>) icon. In addition, it presents Double Tree KWIC visualizations as another lens into the contexts in which these words appear. To view the Double Tree visualization for any word, click the tree (<img class="sample-icons" src="/img/tree-icon.png"/>) icon.<br><br></p>
 
