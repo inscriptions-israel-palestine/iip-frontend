@@ -10,8 +10,6 @@
 		logOut as auth0LogOut
 	} from '$lib/services/authentication';
 
-	const REDIRECT_URL = `${window.location.protocol}//${window.location.host}/inscriptions`;
-
 	let authed = false;
 	let auth0Client: Auth0Client;
 
@@ -28,12 +26,16 @@
 	}
 
 	beforeUpdate(async () => {
+		const REDIRECT_URL = `${window.location.protocol}//${window.location.host}/inscriptions`;
+
 		if (!auth0Client) {
 			auth0Client = await createAuth0Client(REDIRECT_URL);
 		}
 	});
 
 	onMount(async () => {
+		const REDIRECT_URL = `${window.location.protocol}//${window.location.host}/inscriptions`;
+
 		auth0Client = await createAuth0Client(REDIRECT_URL);
 	});
 </script>
