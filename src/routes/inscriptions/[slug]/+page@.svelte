@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Auth0Client } from '@auth0/auth0-spa-js';
-	import type { DisplayStatus, Edition } from '$lib/types/inscription.type';
+	import type { DisplayStatus, Edition, Language } from '$lib/types/inscription.type';
 
 	import { createAuth0Client } from '$lib/services/authentication';
 
@@ -11,6 +11,14 @@
 	import Maplet from '$lib/components/Maplet.svelte';
 	import RenderedEdition from '$lib/components/RenderedEdition.svelte';
 	import ZoteroItem from '$lib/components/ZoteroItem.svelte';
+
+	type DimensionsData = {
+		depth?: number;
+		height?: number;
+		type: string;
+		unit?: string;
+		width?: number;
+	};
 
 	export let data;
 
@@ -29,6 +37,23 @@
 		(edition: Edition) => edition.edition_type === 'diplomatic'
 	);
 	$: zoteroItems = data.zoteroItems || [];
+
+	$: diplomaticBibliography = zoteroItems.filter((item) => item.xml_id === diplomatic?.ana);
+	$: transcriptionBibliography = zoteroItems.filter((item) => item.xml_id === transcription?.ana);
+	$: translationBibliography = zoteroItems.filter((item) => item.xml_id === translation?.ana);
+	$: miscellaneousBibliography = zoteroItems.filter((item) => {
+		return (
+			!diplomaticBibliography.some((i) => i.xml_id === item.xml_id) &&
+			!transcriptionBibliography.some((i) => i.xml_id === item.xml_id) &&
+			!translationBibliography.some((i) => i.xml_id === item.xml_id)
+		);
+	});
+
+	$: dimensions = inscription.dimensions.dimensions?.find(
+		(d: DimensionsData) => d.type === 'surface'
+	);
+
+	$: languagesString = inscription.languages.map((l: Language) => l.label).join(', ');
 
 	function changeDisplayStatus(e: Event) {
 		const target = e.target as HTMLSelectElement;
@@ -61,7 +86,10 @@
 		try {
 			token = await client.getTokenSilently();
 		} catch (e) {
-			console.error(e);
+			// @ts-expect-error
+			if (e.message !== 'Login required') {
+				console.error(e);
+			}
 		}
 	});
 </script>
@@ -76,7 +104,7 @@
 
 <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
 	<div
-		class="mx-auto grid max-w-2xl grid-cols-1 grid-rows-1 items-start gap-x-8 gap-y-8 lg:mx-0 lg:max-w-none lg:grid-cols-3"
+		class="mx-auto grid grid-cols-1 grid-rows-1 items-start gap-x-8 gap-y-8 lg:mx-0 lg:max-w-none lg:grid-cols-3"
 	>
 		<div>
 			<h3 class="font-semibold prose prose-stone">Images</h3>
@@ -233,52 +261,157 @@
 	</div>
 	<div class="bg-stone-200 rounded my-4 px-8 flex justify-between">
 		<div class="py-3">
-			<h2 class="font-semibold prose prose-stone prose-h2 mb-3">Current location</h2>
-			{#if inscription.provenance?.placename}
-				<p class="flex-auto py-0.5 text-xs leading-5 prose prose-stone prose-p">
-					{inscription.provenance.placename}
-				</p>
-			{:else}
-				<p class="flex-auto py-0.5 text-xs leading-5 prose prose-stone prose-p">
-					No provenance provided.
-				</p>
-			{/if}
+			<h2 class="font-semibold prose prose-stone prose-h2 mb-3">Languages</h2>
+			<p class="prose prose-stone">
+				{languagesString}
+			</p>
 		</div>
 		<div class="py-3">
-			<h2 class="font-semibold prose prose-stone prose-h2 mb-3">Figures</h2>
-			{#if inscription.figures.length > 0}
-				<ul role="list" class="space-y-6">
-					{#each inscription.figures as figure}
-						<li class="relative flex gap-x-4">
-							<p class="flex-auto py-0.5 text-xs leading-5 prose prose-stone prose-p">
-								<span class="font-medium prose prose-stone"
-									>{figure.name} {figure.locus.toLowerCase()}</span
-								>
-							</p>
-						</li>
-					{/each}
-				</ul>
-			{:else}
-				<p class="flex-auto py-0.5 text-xs leading-5 prose prose-stone prose-p">
-					No figures described.
-				</p>
-			{/if}
+			<h2 class="font-semibold prose prose-stone prose-h2 mb-3">Dimensions</h2>
+			<p class="prose prose-stone">
+				<span
+					>H:
+					{#if dimensions.height}
+						{dimensions.height} {dimensions.unit};
+					{:else}
+						&mdash;;
+					{/if}
+				</span>
+				<span
+					>W:
+					{#if dimensions.width}
+						{dimensions.width} {dimensions.unit};
+					{:else}
+						&mdash;;
+					{/if}
+				</span>
+				<span
+					>D:
+					{#if dimensions.depth}
+						{dimensions.depth} {dimensions.unit}
+					{:else}
+						&mdash;
+					{/if}
+				</span>
+			</p>
 		</div>
 		<div class="py-3">
-			<h2 class="font-semibold prose prose-stone prose-h2 mb-3">Bibliography</h2>
-			{#if zoteroItems.length > 0}
+			<h2 class="font-semibold prose prose-stone prose-h2 mb-3">Date</h2>
+			<p class="prose prose-stone">
+				{Math.abs(inscription.not_before)}
+				{inscription.not_before < 0 ? 'BCE' : 'CE'} to {Math.abs(inscription.not_after)}
+				{inscription.not_after < 0 ? 'BCE' : 'CE'}
+			</p>
+		</div>
+	</div>
+	<div class="py-3">
+		<h2 class="font-semibold prose prose-stone prose-h2 mb-3">Current location</h2>
+		{#if inscription.provenance?.placename}
+			<p class="flex-auto py-0.5 text-xs leading-5 prose prose-stone prose-p">
+				{inscription.provenance.placename}
+			</p>
+		{:else}
+			<p class="flex-auto py-0.5 text-xs leading-5 prose prose-stone prose-p">
+				No provenance provided.
+			</p>
+		{/if}
+	</div>
+	<div class="py-3">
+		<h2 class="font-semibold prose prose-stone prose-h2 mb-3">Figures</h2>
+		{#if inscription.figures.length > 0}
+			<ul role="list" class="space-y-6">
+				{#each inscription.figures as figure}
+					<li class="relative flex gap-x-4">
+						<p class="flex-auto py-0.5 text-xs leading-5 prose prose-stone prose-p">
+							<span class="font-medium prose prose-stone"
+								>{figure.name} {figure.locus.toLowerCase()}</span
+							>
+						</p>
+					</li>
+				{/each}
+			</ul>
+		{:else}
+			<p class="flex-auto py-0.5 text-xs leading-5 prose prose-stone prose-p">
+				No figures described.
+			</p>
+		{/if}
+	</div>
+	<section class="py-3">
+		<h1 class="text-sm font-bold uppercase">Bibliography</h1>
+		<div class="py-3">
+			<h2 class="font-semibold prose prose-stone prose-h2 mb-3 text-sm uppercase">
+				Source of diplomatic
+			</h2>
+			{#if diplomaticBibliography.length > 0}
 				<ul role="list">
-					{#each zoteroItems as item}
+					{#each diplomaticBibliography as item}
 						<li class="relative flex gap-x-4 pb-4">
 							<ZoteroItem {item} />
 						</li>
 					{/each}
 				</ul>
 			{:else}
-				<p class="flex-auto text-xs prose prose-stone prose-p">No bibliography available.</p>
+				<p class="flex-auto text-xs prose prose-stone prose-p">
+					No bibliography available for diplomatic transcription.
+				</p>
 			{/if}
 		</div>
-	</div>
+		<div class="py-3">
+			<h2 class="font-semibold prose prose-stone prose-h2 mb-3 text-sm uppercase">
+				Source of transcription
+			</h2>
+			{#if transcriptionBibliography.length > 0}
+				<ul role="list">
+					{#each transcriptionBibliography as item}
+						<li class="relative flex gap-x-4 pb-4">
+							<ZoteroItem {item} />
+						</li>
+					{/each}
+				</ul>
+			{:else}
+				<p class="flex-auto text-xs prose prose-stone prose-p">
+					No bibliography available for transcription.
+				</p>
+			{/if}
+		</div>
+		<div class="py-3">
+			<h2 class="font-semibold prose prose-stone prose-h2 mb-3 text-sm uppercase">
+				Source of translation
+			</h2>
+			{#if translationBibliography.length > 0}
+				<ul role="list">
+					{#each translationBibliography as item}
+						<li class="relative flex gap-x-4 pb-4">
+							<ZoteroItem {item} />
+						</li>
+					{/each}
+				</ul>
+			{:else}
+				<p class="flex-auto text-xs prose prose-stone prose-p">
+					No bibliography available for translation.
+				</p>
+			{/if}
+		</div>
+
+		{#if miscellaneousBibliography.length > 0}
+			<div class="py-3">
+				<h2 class="font-semibold prose prose-stone prose-h2 mb-3 text-sm uppercase">
+					Other sources
+				</h2>
+				<ul role="list">
+					{#each miscellaneousBibliography as item}
+						<li class="relative flex gap-x-4 pb-4">
+							<ZoteroItem {item} />
+						</li>
+					{/each}
+				</ul>
+			</div>
+		{/if}
+		<a
+			href={`https://raw.githubusercontent.com/inscriptions-israel-palestine/iip-backend/main/epidoc-files/${inscription.filename}`}
+			class="hover:underline text-sm uppercase">View XML</a
+		>
+	</section>
 	<div class="py-3 space-y-3">
 		<h2 class="font-semibold leading-6 prose prose-stone prose-h2 mb-3">Cite This Inscription</h2>
 
