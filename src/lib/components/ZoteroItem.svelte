@@ -3,8 +3,6 @@
 	import type { ZoteroItem } from '$lib/types/zotero.type';
 
 	export let item: ZoteroItem & BibliographicEntry;
-
-	$: console.log(item);
 </script>
 
 <div class="flex-auto text-sm prose prose-stone prose-p">
