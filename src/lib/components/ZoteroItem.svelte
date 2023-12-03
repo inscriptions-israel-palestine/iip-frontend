@@ -38,6 +38,6 @@
 		<div bind:this={itemContainer}>
 			{@html item.bib}
 		</div>
-		<a class="hover:underline text-sm" href={item.links.alternate.href}>Zotero</a>
+		<a class="hover:underline text-sm" href={item.links?.alternate?.href}>Zotero</a>
 	</div>
 </div>
