@@ -10,7 +10,7 @@
 	$: totalPages = data.pages;
 </script>
 
-<main class="py-10">
+<main class="py-10 pr-10">
 	<div class="fixed top-32 right-4 z-40">
 		<div class="flex space-x-2">
 			<a

@@ -23,6 +23,7 @@
 			<tr>
 				<td><!-- image if available --></td>
 				<td>Title</td>
+				<td>ID</td>
 				<td>Language(s)</td>
 				<td>Date</td>
 				<td>Transcription</td>
