@@ -34,16 +34,18 @@
   }
 </script>
 
+<tr class="alpha_link"><a id="{word.lemma.normalize('NFD')[0]}"/></tr>
 <tr class={`level0 pos${word.pos}`}>
-	<td colspan="2">
-		<button type="button" id="button{id}" class="btn btn-primary" on:click={toggleIsExpanded}>+</button>
+	<td colspan="2">&nbsp;<br>
+	    <table><tr><td rowspan="2" style="vertical-align:center;">
+		<button type="button" id="button{id}" class="btn btn-primary" on:click={toggleIsExpanded}>+</button></td><td>
 		<span class="font-bold">{word.lemma}</span>
-		{word.pos} ({word.count})
-		<br>
+		{word.pos} ({word.count})</td></tr><tr>
+		<td>
 		<a href={getDictionary(language, word.lemma)} target="_blank">
 		    <img class="dictionary-icon" src="/img/dictionary.png" alt="Dictionary icon"/>
 		</a> 
-		<img class="tree-icon" src="/img/tree-icon.png"/>
+		<img class="tree-icon" src="/img/tree-icon.png"/></td></tr></table>
 	</td>
 </tr>
 
