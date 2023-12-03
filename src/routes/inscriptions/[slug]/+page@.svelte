@@ -171,7 +171,7 @@
 						<td class="max-w-0 px-0 py-5 align-top font-medium prose prose-stone whitespace-normal">
 							<div class="font-medium prose prose-stone">Transcription</div>
 							<p id="transcription" class="prose prose-p prose-stone font-normal transcription">
-								{#if transcription}
+								{#if transcription?.text}
 									<RenderedEdition edition={transcription} />
 								{:else}
 									[no transcription]
@@ -183,7 +183,7 @@
 						<td class="max-w-0 px-0 py-5 align-top font-medium prose prose-stone whitespace-normal">
 							<div class="font-medium prose prose-stone">Translation</div>
 							<p id="translation" class="prose prose-p prose-stone font-normal translation">
-								{#if translation}
+								{#if translation?.text}
 									<RenderedEdition edition={translation} />
 								{:else}
 									[no translation]
@@ -195,7 +195,7 @@
 						<td class="max-w-0 px-0 py-5 align-top font-medium prose prose-stone">
 							<div class="font-medium prose prose-stone">Diplomatic</div>
 							<p id="diplomatic" class="prose prose-p prose-stone font-normal diplomatic">
-								{#if diplomatic}
+								{#if diplomatic?.text}
 									<RenderedEdition edition={diplomatic} />
 								{:else}
 									[no diplomatic]
@@ -222,11 +222,13 @@
 						>
 					</dd>
 				</div>
-				<div class="mt-6 border-t border-gray-900/5 pt-6 sm:pr-4">
-					<dt class="font-semibold prose prose-stone">Summary</dt>
-					<dd class="mt-2 prose prose-stone">{inscription.description || ''}</dd>
-				</div>
 			</dl>
+			{#if inscription.description}
+				<div class="mt-6 border-t border-gray-900/5 pt-6 sm:pr-4">
+					<dt class="font-semibold prose prose-stone">Notes</dt>
+					<dd class="mt-2 prose prose-stone">{inscription.description}</dd>
+				</div>
+			{/if}
 		</div>
 	</div>
 	<div class="bg-stone-200 rounded my-4 px-8 flex justify-between">
