@@ -25,10 +25,16 @@ export async function createAuth0Client(redirect_uri: string) {
 		domain: env.PUBLIC_AUTH0_DOMAIN
 	});
 
+	console.log(client)
+
 	try {
-		isAuthenticated.set(await client.isAuthenticated());
-		user.set(await client.getUser());
-		token.set(await client.getTokenSilently());
+		const clientIsAuthenticated = await client.isAuthenticated();
+		isAuthenticated.set(clientIsAuthenticated);
+
+		if (clientIsAuthenticated) {
+			user.set(await client.getUser());
+			token.set(await client.getTokenSilently());
+		}
 	} catch (e) {
 		// just ignore this error, as the user won't be logged in.
 	}
