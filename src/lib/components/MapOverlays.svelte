@@ -23,7 +23,7 @@
 			popupTitle: (featureName: string) =>
 				`<h1 class="font-bold text-sm prose prose-stone">King Herod Boundary</h1>
 				<p class="text-sm prose prose-stone">${featureName}</p>`,
-			url: '/geojson/king_herod_boundaries_37BCE.geojson'
+			url: '/geojson/king_herod_boundaries_37BCE.geojson.gz'
 		},
 		roman_provinces: {
 			isChecked: false,
@@ -36,7 +36,7 @@
 			popupTitle: (featureName: string) =>
 				`<h1 class="font-bold text-sm prose prose-stone">Roman Province</h1>
 				<p class="text-sm prose prose-stone">${featureName}</p>`,
-			url: '/geojson/roman_provinces.geojson'
+			url: '/geojson/roman_provinces.geojson.gz'
 		},
 		roman_roads: {
 			name: 'Roman Roads',
@@ -53,7 +53,7 @@
 				'line-opacity': 0.5,
 				'line-width': ['case', ['==', '0', ['get', 'Major_or_M']], 2, 3]
 			},
-			url: '/geojson/roman_roads.geojson'
+			url: '/geojson/roman_roads.geojson.gz'
 		},
 		byzantine_provinces: {
 			isChecked: false,
@@ -66,7 +66,7 @@
 			popupTitle: (featureName: string) =>
 				`<h1 class="font-bold text-sm prose prose-stone">Byzantine Province</h1>
 				<p class="text-sm prose prose-stone">${featureName}</p>`,
-			url: '/geojson/byzantine_provinces_400CE.geojson'
+			url: '/geojson/byzantine_provinces_400CE.geojson.gz'
 		},
 		iip_regions: {
 			isChecked: false,
@@ -79,7 +79,7 @@
 			popupTitle: (featureName: string) =>
 				`<h1 class="font-bold text-sm prose prose-stone">IIP Region</h1>
 				<p class="text-sm prose prose-stone">${featureName}</p>`,
-			url: '/geojson/IIP_regions.geojson'
+			url: '/geojson/IIP_regions.geojson.gz'
 		}
 	};
 	const OVERLAY_IDS = Object.keys(OVERLAYS);
