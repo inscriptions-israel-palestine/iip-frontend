@@ -27,7 +27,7 @@
       case 'greek':
         return `https://www.perseus.tufts.edu/hopper/morph?l=${lemma}&la=greek`;
       case 'hebrew':
-        return `https://en.wiktionary.org/wiki/${lemma}#Hebrew`;
+        return `https://www.morfix.co.il/en/${lemma}`;
       case 'aramaic':
         return `https://cal.huc.edu/browseSKEYheaders.php?tools=on&first3=${lemma.slice(0, 3)}`;
     }
