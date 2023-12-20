@@ -17,17 +17,17 @@
 	}
 </script>
 
-<div class="top-24 px-24 overflow-auto">
+<div class="top-24 overflow-auto md:mx-24 max-w-screen-lg">
 	<table class="table table-md table-pin-rows">
 		<thead>
 			<tr>
-				<td><!-- image if available --></td>
+				<td class="hidden sm:table-cell"><!-- image if available --></td>
 				<td>Title</td>
 				<td>ID</td>
 				<td>Language(s)</td>
 				<td>Date</td>
-				<td>Transcription</td>
-				<td>Translation</td>
+				<td class="hidden sm:table-cell">Transcription</td>
+				<td class="hidden sm:table-cell">Translation</td>
 			</tr>
 		</thead>
 		<tbody>

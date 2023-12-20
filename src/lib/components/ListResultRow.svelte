@@ -41,7 +41,7 @@
 </script>
 
 <tr>
-	<td class="w-8 h-8 sm:w-24 sm:h-24"><SearchResultImage {inscription} /></td>
+	<td class="hidden sm:table-cell sm:w-24 sm:h-24"><SearchResultImage {inscription} /></td>
 	<td
 		><a href={`/inscriptions/${inscriptionId}`}>
 			{inscription.title}
@@ -50,14 +50,14 @@
 	<td>{inscriptionId}</td>
 	<td>{(inscription.languages || []).map((language) => language.label).join(', ')}</td>
 	<td>{formatDate(inscription)}</td>
-	<td class="prose prose-stone">
+	<td class="hidden sm:table-cell prose prose-stone">
 		{#if transcription && transcription.text}
 			<RenderedEdition edition={transcription} />
 		{:else}
 			[no transcription]
 		{/if}
 	</td>
-	<td class="prose prose-stone">
+	<td class="hidden sm:table-cell prose prose-stone">
 		{#if translation && translation.text}
 			<RenderedEdition edition={translation} />
 		{:else}
