@@ -1,0 +1,88 @@
+.table {
+   margin: auto;
+}
+
+table th {
+   text-align: center; 
+}
+
+.floating-menu {
+    font-family: sans-serif;
+    padding: 5px;;
+    width: 130px;
+    z-index: 100;
+	left: 20px;
+    position: fixed;
+}
+
+#latin-table{
+	display: none;
+}
+
+#latin-pos-table td {
+    border: none;
+}
+
+#latin-pos-table>tbody>tr.level0>td{
+	padding-top: 20px;
+}
+
+td>.btn {
+	padding: 5px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	border-radius: 8px;
+	margin-right: 6px;
+}
+
+#latin-pos-table {
+	table-layout: fixed
+}
+
+#latin-pos-table .formentry {
+    padding-left: 40px;
+}
+
+p#atoz {
+	background-color: lightgray;
+	padding: 10px;
+	width: 150px;
+	font-size: 15px;
+}
+
+a.alphalink {
+	cursor: pointer;
+}
+
+#posfilter {
+	background-color: lightgray;
+	padding: 10px;
+	width: 150px;
+	margin: auto;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+img.dictionary-icon {
+    height: 20px;
+    display: inline;
+}
+
+img.tree-icon {
+    height: 20px;
+    cursor: pointer;
+    display: inline;
+}
+
+img.sample-icons {
+    height: 20px;
+    width: 20px;
+    display: inline;
+    object-fit: cover;
+}
+
+a > b {
+	color: #00455D;
+}
+
+

@@ -1,17 +1,8 @@
 <script lang="ts">
-	import WordListRow from '$lib/components/WordListRow.svelte';
-
-	export let data;
-
-	$: allWords = data.words;
-	$: words = allWords.lemmas;
-	$: doubletree_data: JSON.stringify(allWords.db_list);
-
-/*	function filterByPos() {
-		console.log('filtering');
-	}*/
+	import type { WordListWord } from '$lib/types/word_list_word.type';
+    export let words
 	
-    function posFilter() {
+	function posFilter() {
       const checked = new Set();
       const posFilterCheckboxes = document.querySelectorAll('.pos-filter');
       const latinPosTable = document.getElementById('latin-pos-table');
@@ -36,14 +27,63 @@
 				    row.style.display = 'none';
 				    hiding = true;
 			    }
+		    } else if (row.classList.contains('alpha_link')) { 
 		    } else if (hiding) {
 			    row.style.display = 'none';
 		    }
 	    }
-    }
+    };
+    // Function to extract unique starting letters from words
+    function getUniqueStartingLetters() {
+        const startingLetters = new Set();
+        words.forEach(word => {
+        const firstLetter = word.lemma.normalize('NFD')[0]
+        if (typeof firstLetter !== "undefined") {
+            const lowerCaseChar = firstLetter.toLowerCase();
+            startingLetters.add(lowerCaseChar);
+        }
+        });
+        return Array.from(startingLetters).sort();
+    };
+    
+    function alphaClick(event) {
+	    const letter = event.target.innerHTML;
+	    findAndScroll(letter);
+    };
+
+    function findAndScroll(letter) {
+	    var table = document.getElementById("latin-pos-table");
+	    var scrollTop = window.scrollY;
+	    let offset = 0
+	    for (var r = 0, row; row = table.rows[r]; r++) {
+		    if(row.classList.contains('level0')) {
+		        const textContent = row.querySelector('span').textContent.trim();
+			    const normalizedText = textContent.normalize('NFD');
+			    if (normalizedText[0] == letter) {
+			        offset = row.getBoundingClientRect().top + scrollTop - 100;
+			        window.scrollTo({
+			        	top: offset
+			        });
+			        return;
+	            }
+		    }
+	    }
+    };
 </script>
 
-<div class="container mx-auto">
+<div class="container text-left">
+
+    <div class="floating-menu">
+    
+    <p align="center" id="atoz">
+      {#each getUniqueStartingLetters() as letter, index}
+        {#if words.some(word => word.lemma.toLowerCase().startsWith(letter))}
+          {#if index !== 0}&nbsp;|{/if}
+          <a href="#{letter}">{letter}</a>
+        {/if}
+      {/each}
+    </p>
+    
 	<div id="posfilter" class="flex justify-center">
 		<!-- FIXME: For accessibility and development ease, this should be a proper form. -->
 		<div class="form-group">
@@ -75,10 +115,5 @@
 			<button type="submit" on:click={posFilter} class="btn btn-primary mb-2">Submit</button>
 		</div>
 	</div>
-
-	<table id="latin-pos-table" class="table-auto">
-		{#each words as word}
-			<WordListRow {word} />
-		{/each}
-	</table>
+	</div>
 </div>
