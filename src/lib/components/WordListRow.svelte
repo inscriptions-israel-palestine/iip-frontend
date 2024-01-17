@@ -1,12 +1,17 @@
 <script lang="ts">
 	import type { WordListWord } from '$lib/types/word_list_word.type';
 
+	import { drawTree } from '$lib/d3/Tree';
+
 	export let word: WordListWord;
 	export let language: string;
 	export let id: string;
+	export let treeData: any;
 
 	$: isExpanded = false;
 	$: isTreeShown = false;
+
+	let doubletreeContainer: HTMLElement;
 
 	function toggleIsExpanded(_e: Event) {
 		isExpanded = !isExpanded;
@@ -14,6 +19,27 @@
 
 	function toggleIsTreeShown(_e: Event) {
 		isTreeShown = !isTreeShown;
+
+		if (isTreeShown) {
+			const prefixes = [
+				{ name: 'root' },
+				{ parent: 'root', name: 'prefix1 prefix1 prefix1' },
+				{ parent: 'root', name: 'prefix2 prefix2 prefix2' },
+				{ parent: 'root', name: 'prefix3 prefix3 prefix3' }
+			];
+
+			const suffixes = [
+				{ name: 'root' },
+				{ parent: 'root', name: 'suffix1 suffix1 suffix1' },
+				{ parent: 'root', name: 'suffix2 suffix2 suffix2' },
+				{ parent: 'root', name: 'suffix3 suffix3 suffix3' }
+			];
+			drawTree(doubletreeContainer, 'root', prefixes, suffixes);
+		} else {
+			const svg = doubletreeContainer.querySelector('svg');
+
+			doubletreeContainer.removeChild(svg as Node);
+		}
 	}
 
 	function getDictionary(language: string, lemma: string) {
@@ -49,7 +75,9 @@
 					<a href={getDictionary(language, word.lemma)} target="_blank">
 						<img class="dictionary-icon" src="/img/dictionary.png" alt="Dictionary icon" />
 					</a>
-					<img class="tree-icon" src="/img/tree-icon.png" alt="tree icon" /></td
+					<button type="button" on:click={toggleIsTreeShown}>
+						<img class="tree-icon" src="/img/tree-icon.png" alt="tree icon" />
+					</button></td
 				></tr
 			>
 		</table>
@@ -83,3 +111,37 @@
 		<tr>&nbsp;</tr>
 	{/each}
 {/if}
+
+<div class="doubletree" bind:this={doubletreeContainer} />
+
+<svelte:head>
+	<style>
+		body {
+			position: fixed;
+			left: 0;
+			right: 0;
+			top: 0;
+			bottom: 0;
+			margin: 0;
+			overflow: hidden;
+		}
+		/* upstream */
+		path.links-0 {
+			fill: none;
+			stroke: #d3d3d3;
+		}
+		/* downstream */
+		path.links-1 {
+			fill: none;
+			stroke: #d3d3d3;
+		}
+		text {
+			text-shadow: -1px -1px 3px white, -1px 1px 3px white, 1px -1px 3px white, 1px 1px 3px white;
+			pointer-events: none;
+			font-family: 'Playfair Display', serif;
+		}
+		circle {
+			fill: #d3d3d3;
+		}
+	</style>
+</svelte:head>

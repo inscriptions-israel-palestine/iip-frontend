@@ -5,42 +5,41 @@
 
 	$: allWords = data.words;
 	$: words = allWords.lemmas;
-	$: doubletree_data: JSON.stringify(allWords.db_list);
 
-/*	function filterByPos() {
+	/*	function filterByPos() {
 		console.log('filtering');
 	}*/
-	
-    function posFilter() {
-      const checked = new Set();
-      const posFilterCheckboxes = document.querySelectorAll('.pos-filter');
-      const latinPosTable = document.getElementById('latin-pos-table');
 
-      posFilterCheckboxes.forEach((obj) => {
-        if (obj.checked) {
-          checked.add(obj.value);
-        }
-      });
-	    const noCheck = checked.size == 0
-	    var table = document.getElementById("latin-pos-table")
-	    var hiding = false
-	    for(var r = 0, row; row = table.rows[r]; r++) {
-		    if(row.classList.contains('level0')) {
-			    const rowHTML = row.innerHTML
-			    const ind = rowHTML.indexOf("</span>")
-			    const pos = rowHTML.substring(ind + 8, rowHTML.indexOf(" ", ind + 9))
-			    if(noCheck || checked.has(pos)) {
-				    row.style.display = '';
-				    hiding = false;
-			    } else {
-				    row.style.display = 'none';
-				    hiding = true;
-			    }
-		    } else if (hiding) {
-			    row.style.display = 'none';
-		    }
-	    }
-    }
+	function posFilter() {
+		const checked = new Set();
+		const posFilterCheckboxes = document.querySelectorAll('.pos-filter');
+		const latinPosTable = document.getElementById('latin-pos-table');
+
+		posFilterCheckboxes.forEach((obj) => {
+			if (obj.checked) {
+				checked.add(obj.value);
+			}
+		});
+		const noCheck = checked.size == 0;
+		var table = document.getElementById('latin-pos-table');
+		var hiding = false;
+		for (var r = 0, row; (row = table.rows[r]); r++) {
+			if (row.classList.contains('level0')) {
+				const rowHTML = row.innerHTML;
+				const ind = rowHTML.indexOf('</span>');
+				const pos = rowHTML.substring(ind + 8, rowHTML.indexOf(' ', ind + 9));
+				if (noCheck || checked.has(pos)) {
+					row.style.display = '';
+					hiding = false;
+				} else {
+					row.style.display = 'none';
+					hiding = true;
+				}
+			} else if (hiding) {
+				row.style.display = 'none';
+			}
+		}
+	}
 </script>
 
 <div class="container mx-auto">
@@ -78,7 +77,7 @@
 
 	<table id="latin-pos-table" class="table-auto">
 		{#each words as word}
-			<WordListRow {word} />
+			<WordListRow {word} treeData={allWords.db_list} language="language" id="id" />
 		{/each}
 	</table>
 </div>
