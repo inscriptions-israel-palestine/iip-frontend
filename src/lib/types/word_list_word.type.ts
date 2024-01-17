@@ -21,5 +21,9 @@ export type Lemma = {
 };
 
 export type WordListWord = {
+  count: number;
+  forms: Form[];
+  lemma: string;
   lemmas: Lemma[];
+  pos: string;
 };
