@@ -7,7 +7,6 @@
 	$: allWords = data.words;
 	$: words = allWords.lemmas;
 	$: allForms = words.forms;
-	$: doubletree_data: JSON.stringify(allWords.db_list);
 </script>
 
 <WordListFilters {words} />
@@ -36,7 +35,7 @@
 		class="sample-icons"
 		alt="dictionary icon"
 		src="/img/dictionary.png"
-	/>). In addition, it presents Double Tree KWIC visualizations as another lens into the contexts in
+	/>). In addition, it presents <a href="http://linguistics.chrisculy.net/lx/software/DoubleTreeJS/" style="color: grey">Double Tree</a> KWIC visualizations as another lens into the contexts in
 	which these words appear. To view the Double Tree visualization for any word, click the tree icon
 	(<img class="sample-icons" alt="tree icon" src="/img/tree-icon.png" />).<br /><br />
 </p>
@@ -44,7 +43,7 @@
 <div class="container text-left" style="padding-left: 200px;">
 	<table id="latin-pos-table" class="table-auto" width="100%">
 		{#each words as word, index}
-			<WordListRow {word} id={index + 1} language="latin" />
+			<WordListRow {word} treeData={allWords.db_list} id={index + 1} language="latin" />
 		{/each}
 	</table>
 </div>

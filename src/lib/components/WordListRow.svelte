@@ -1,26 +1,47 @@
 <script lang="ts">
 	import type { WordListWord } from '$lib/types/word_list_word.type';
 
-	import { drawTree } from '$lib/d3/Tree';
-
 	export let word: WordListWord;
 	export let language: string;
 	export let id: string;
-	export let treeData: any;
+	export let treeData
+	
+	let treeDataStr = JSON.stringify(treeData)
+	let doubletreeContainer: HTMLElement;
 
 	$: isExpanded = false;
 	$: isTreeShown = false;
 
-	let doubletreeContainer: HTMLElement;
+	let lemmaPOS = `${word.lemma.toLowerCase()}/${word.pos}`;
 
 	function toggleIsExpanded(_e: Event) {
 		isExpanded = !isExpanded;
 	}
+	
+    function toggleIsTreeShown(obj, counter) {
+        if (language == 'latin') {
+		    isTreeShown = !isTreeShown;
+		    /*let dbtreerow = doubletreeContainer;*/
+		    
+		    const dbtreerow = document.getElementById(`doubletree${counter}`);
+		    
+		    if (isTreeShown) {
+	            if(obj.indexOf(" | ") > -1) {
+		            obj = obj.replace(" | ", "|")
+	            }
+	                drawDT(treeDataStr, obj, counter);
+		        } 
+		    else {
+		        const svg = dbtreerow.querySelector('svg');
+		        if (svg) {
+		            doubletreeContainer.removeChild(svg as Node);
+		            }
+		        }
+		    }
+		}
+		
 
-	function toggleIsTreeShown(_e: Event) {
-		isTreeShown = !isTreeShown;
-
-		if (isTreeShown) {
+		/*if (isTreeShown) {
 			const prefixes = [
 				{ name: 'root' },
 				{ parent: 'root', name: 'prefix1 prefix1 prefix1' },
@@ -40,7 +61,7 @@
 
 			doubletreeContainer.removeChild(svg as Node);
 		}
-	}
+	}*/
 
 	function getDictionary(language: string, lemma: string) {
 		switch (language) {
@@ -61,25 +82,29 @@
 	<td colspan="2"
 		>&nbsp;<br />
 		<table>
-			<tr
-				><td rowspan="2" style="vertical-align:center;">
+			<tr>
+				<td rowspan="2" style="vertical-align:center;">
 					<button type="button" id="button{id}" class="btn btn-primary" on:click={toggleIsExpanded}
-						>{isExpanded ? '-' : '+'}</button
-					></td
-				><td>
+						>{isExpanded ? '-' : '+'}</button>
+					</td>
+				<td>
 					<span class="font-bold">{word.lemma}</span>
-					{word.pos} ({word.count})</td
-				></tr
-			><tr>
+					{word.pos} ({word.count})</td>
+				</tr>
+			<tr>
 				<td>
 					<a href={getDictionary(language, word.lemma)} target="_blank">
 						<img class="dictionary-icon" src="/img/dictionary.png" alt="Dictionary icon" />
 					</a>
-					<button type="button" on:click={toggleIsTreeShown}>
-						<img class="tree-icon" src="/img/tree-icon.png" alt="tree icon" />
-					</button></td
-				></tr
-			>
+					<button type="button" on:click={() => toggleIsTreeShown(lemmaPOS, id)}>
+					    {#if language == 'latin'}
+						    <img class="tree-icon" src="/img/tree-icon.png" alt="tree icon" />
+						{:else}
+						    <img class="tree-icon" style="opacity:0.25;" src="/img/tree-icon.png" alt="tree icon" />
+						{/if}
+					</button>
+				</td>
+			</tr>
 		</table>
 	</td>
 </tr>
@@ -112,11 +137,13 @@
 	{/each}
 {/if}
 
-<div class="doubletree" bind:this={doubletreeContainer} />
+<div id="doubletreerow{id}">
+    <div id="doubletree{id}" bind:this={doubletreeContainer} />
+</div>
 
-<svelte:head>
+<!--svelte:head>
 	<style>
-		body {
+		/*body {
 			position: fixed;
 			left: 0;
 			right: 0;
@@ -124,7 +151,7 @@
 			bottom: 0;
 			margin: 0;
 			overflow: hidden;
-		}
+		}/*
 		/* upstream */
 		path.links-0 {
 			fill: none;
@@ -144,4 +171,4 @@
 			fill: #d3d3d3;
 		}
 	</style>
-</svelte:head>
+</svelte:head-->
