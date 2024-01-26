@@ -1,53 +1,35 @@
 <script lang="ts">
-	import WordListRow from '$lib/components/WordListRow.svelte';
-
-	export let data;
-
-	$: allWords = data.words;
-	$: words = allWords.lemmas;
-	$: doubletree_data: JSON.stringify(allWords.db_list);
-
-	function filterByPos() {
-		console.log('filtering');
-	}
+	import WordListFilters from '$lib/components/WordListFilters.svelte';
 </script>
 
-<div class="container mx-auto">
-	<div id="posfilter" class="flex justify-center">
-		<!-- FIXME: For accessibility and development ease, this should be a proper form. -->
-		<div class="form-group">
-			<h5>Part of Speech Filter:</h5>
-			<div class="form-check">
-				<input class="form-check-input pos-filter" type="checkbox" value="N" id="nouncheck" />
-				<label class="form-check-label" for="nouncheck"> Noun </label>
+<div class="container text-left">
+	<div class="floating-menu">
+		<p id="atoz">
+			Alphabetic links:<br><br>No language selected.
+		</p>
+
+		<div id="posfilter" class="flex justify-center">
+			<!-- FIXME: For accessibility and development ease, this should be a proper form. -->
+			<div>
+				<h5>Part of Speech Filter:</h5>
+				<br>No language selected.
 			</div>
-			<div class="form-check">
-				<input class="form-check-input pos-filter" type="checkbox" value="V" id="verbcheck" />
-				<label class="form-check-label" for="verbcheck"> Verb </label>
-			</div>
-			<div class="form-check">
-				<input class="form-check-input pos-filter" type="checkbox" value="ADJ" id="adjcheck" />
-				<label class="form-check-label" for="adjcheck"> Adjective </label>
-			</div>
-			<div class="form-check">
-				<input class="form-check-input pos-filter" type="checkbox" value="ADV" id="advcheck" />
-				<label class="form-check-label" for="advcheck"> Adverb </label>
-			</div>
-			<div class="form-check">
-				<input class="form-check-input pos-filter" type="checkbox" value="PREP" id="prepcheck" />
-				<label class="form-check-label" for="prepcheck"> Preposition </label>
-			</div>
-			<div class="form-check">
-				<input class="form-check-input pos-filter" type="checkbox" value="CC" id="cccheck" />
-				<label class="form-check-label" for="cccheck"> Conjunction </label>
-			</div>
-			<button type="submit" on:click={filterByPos} class="btn btn-primary mb-2">Submit</button>
 		</div>
 	</div>
-
-	<table id="latin-pos-table" class="table-auto">
-		{#each words as word}
-			<WordListRow {word} />
-		{/each}
-	</table>
 </div>
+
+<p id="lang-select" align="justify" style="padding-left: 200px; padding-right: 80px;">
+	<span class="italic">Select language:</span> <a href="/wordlist/latin">Latin</a> |
+	<a href="/wordlist/greek">Greek</a>
+	| <a href="/wordlist/hebrew">Hebrew</a> | <a href="/wordlist/aramaic">Aramaic</a>
+</p>
+<h2
+	class="font-semibold leading-6 prose prose-h2 prose-stone prose-2xl"
+	style="padding: 20px; padding-left: 200px"
+>
+	Inscriptions of Israel/Palestine Wordlists
+</h2>
+
+<p align="justify" style="padding-left: 200px; padding-right: 80px;">
+	These pages contain wordlists for the Latin, Greek, Hebrew, and Aramaic texts in the IIP project. Please select a language above to view its corresponding wordlist.
+</p>
