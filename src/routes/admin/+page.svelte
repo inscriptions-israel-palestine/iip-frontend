@@ -26,20 +26,24 @@
 	}
 
 	beforeUpdate(async () => {
+		const REDIRECT_URL = `${window.location.protocol}//${window.location.host}/inscriptions`;
+
 		if (!auth0Client) {
-			auth0Client = await createAuth0Client();
+			auth0Client = await createAuth0Client(REDIRECT_URL);
 		}
 	});
 
 	onMount(async () => {
-		auth0Client = await createAuth0Client();
+		const REDIRECT_URL = `${window.location.protocol}//${window.location.host}/inscriptions`;
+
+		auth0Client = await createAuth0Client(REDIRECT_URL);
 	});
 </script>
 
 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
 	<div class="mx-auto max-w-4xl">
 		{#if authed}
-            <a class="btn btn-default w-full" href="#/logout" on:click|preventDefault={logOut}>Log out</a>
+			<a class="btn btn-default w-full" href="#/logout" on:click|preventDefault={logOut}>Log out</a>
 		{:else}
 			<a class="btn btn-default w-full" href="#/login" on:click|preventDefault={logIn}>Log in</a>
 		{/if}

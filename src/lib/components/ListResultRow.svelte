@@ -1,15 +1,18 @@
 <script lang="ts">
-	import type { Inscription } from "$lib/types/inscription.type";
+	import type { Inscription } from '$lib/types/inscription.type';
 
-    import RenderedEdition from "./RenderedEdition.svelte";
-    import SearchResultImage from "./SearchResultImage.svelte";
+	import RenderedEdition from './RenderedEdition.svelte';
+	import SearchResultImage from './SearchResultImage.svelte';
 
-    export let inscription: Inscription;
+	export let inscription: Inscription;
 
-    $: transcription = inscription?.editions?.find(edition => edition.edition_type === 'transcription');
-	$: translation = inscription?.editions?.find(edition => edition.edition_type === 'translation');
+	$: transcription = inscription?.editions?.find(
+		(edition) => edition.edition_type === 'transcription'
+	);
+	$: translation = inscription?.editions?.find((edition) => edition.edition_type === 'translation');
+	$: inscriptionId = inscription?.filename?.replace('.xml', '');
 
-    function formatDate(inscription: Inscription) {
+	function formatDate(inscription: Inscription) {
 		if (inscription.not_before === inscription.not_after) {
 			return parseDate(inscription.not_before);
 		}
@@ -17,7 +20,7 @@
 		return `Between ${parseDate(inscription.not_before)} and ${parseDate(inscription.not_after)}`;
 	}
 
-    function parseDate(s: string | undefined) {
+	function parseDate(s: string | undefined) {
 		if (s === undefined || s === null) {
 			return 'Unknown';
 		}
@@ -38,26 +41,27 @@
 </script>
 
 <tr>
-    <td class="w-8 h-8 sm:w-24 sm:h-24"><SearchResultImage {inscription} /></td>
-    <td
-        ><a href={`/inscriptions/${inscription.filename.replace('.xml', '')}`}>
-            {inscription.title}
-        </a>
-    </td>
-    <td>{(inscription.languages || []).map((language) => language.label).join(', ')}</td>
-    <td>{formatDate(inscription)}</td>
-    <td>
-        {#if transcription && transcription.text}
-            <RenderedEdition edition={transcription} />
-        {:else}
-            [no transcription]	
-        {/if}
-    </td>
-    <td>
-        {#if translation && translation.text}
-            <RenderedEdition edition={translation} />
-        {:else}
-            [no translation]	
-        {/if}
-    </td>
+	<td class="hidden sm:table-cell sm:w-24 sm:h-24"><SearchResultImage {inscription} /></td>
+	<td
+		><a href={`/inscriptions/${inscriptionId}`}>
+			{inscription.title}
+		</a>
+	</td>
+	<td>{inscriptionId}</td>
+	<td>{(inscription.languages || []).map((language) => language.label).join(', ')}</td>
+	<td>{formatDate(inscription)}</td>
+	<td class="hidden sm:table-cell prose prose-stone">
+		{#if transcription && transcription.text}
+			<RenderedEdition edition={transcription} />
+		{:else}
+			[no transcription]
+		{/if}
+	</td>
+	<td class="hidden sm:table-cell prose prose-stone">
+		{#if translation && translation.text}
+			<RenderedEdition edition={translation} />
+		{:else}
+			[no translation]
+		{/if}
+	</td>
 </tr>
