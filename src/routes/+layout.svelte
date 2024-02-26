@@ -110,7 +110,7 @@
 				>
 			</div>
 		</div>
-		<div class=" w-full md:w-1/2 pt-8 md:pt-0">
+		<div class="w-full pt-8 md:pt-0">
 			<div class="flex justify-start md:justify-end items-center">
 				<a href="https://library.brown.edu/create/cds/" class="pb-4">
 					<span class="text-lg font-thin serif w-40 ml-0 md:ml-4 whitespace-nowrap"
@@ -118,10 +118,10 @@
 					>
 				</a>
 				<a href="https://www.brown.edu/">
-					<img class="logo w-32 mb-4 ml-6" src="/img/brown_logo.png" alt="Brown University Logo" />
+					<img class="logo w-20 mb-4 ml-6" src="/img/brown_logo.png" alt="Brown University Logo" />
 				</a>
 				<a href="https://inscriptionsisraelpalestine.org/">
-					<img class="logo w-40 mb-4 ml-4" src="/img/iip_logo.png" alt="IIP Logo" />
+					<img class="logo w-20 md:w-32 mb-4 ml-4" src="/img/iip_logo.png" alt="IIP Logo" />
 				</a>
 			</div>
 		</div>
