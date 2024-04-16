@@ -7,6 +7,11 @@ const ZOTERO_GROUP_ID = 180188;
 
 export async function load({ params }) {
 	const response = await fetch(`${env.PUBLIC_API_URL}/inscriptions/${params.slug}`);
+
+	if (response.status === 404) {
+		throw error(404, 'Inscription not found');
+	}
+
 	const inscription = await response.json();
 
 	if (!inscription || inscription.detail === 'Not authenticated') {
