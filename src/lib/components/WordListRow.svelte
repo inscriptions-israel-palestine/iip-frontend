@@ -4,9 +4,9 @@
 	export let word: WordListWord;
 	export let language: string;
 	export let id: string;
-	export let treeData
-	
-	let treeDataStr = JSON.stringify(treeData)
+	export let treeData;
+
+	let treeDataStr = JSON.stringify(treeData);
 	let doubletreeContainer: HTMLElement;
 
 	$: isExpanded = false;
@@ -17,31 +17,30 @@
 	function toggleIsExpanded(_e: Event) {
 		isExpanded = !isExpanded;
 	}
-	
-    function toggleIsTreeShown(obj, counter) {
-        if (language == 'latin') {
-		    isTreeShown = !isTreeShown;
-		    /*let dbtreerow = doubletreeContainer;*/
-		    
-		    const dbtreerow = document.getElementById(`doubletree${counter}`);
-		    
-		    if (isTreeShown) {
-	            if(obj.indexOf(" | ") > -1) {
-		            obj = obj.replace(" | ", "|")
-	            }
-	                drawDT(treeDataStr, obj, counter);
-		        } 
-		    else {
-		        const svg = dbtreerow.querySelector('svg');
-		        if (svg) {
-		            doubletreeContainer.removeChild(svg as Node);
-		            }
-		        }
-		    }
-		}
-		
 
-		/*if (isTreeShown) {
+	function toggleIsTreeShown(obj: any, counter: string) {
+		if (language == 'latin') {
+			isTreeShown = !isTreeShown;
+			/*let dbtreerow = doubletreeContainer;*/
+
+			const dbtreerow = document.getElementById(`doubletree${counter}`);
+
+			if (isTreeShown) {
+				if (obj.indexOf(' | ') > -1) {
+					obj = obj.replace(' | ', '|');
+				}
+				// @ts-expect-error --- drawDT is declared in /vendor/doubletreejs/doubletree-kwic-extras.js
+				drawDT(treeDataStr, obj, counter);
+			} else {
+				const svg = dbtreerow?.querySelector('svg');
+				if (svg) {
+					doubletreeContainer.removeChild(svg as Node);
+				}
+			}
+		}
+	}
+
+	/*if (isTreeShown) {
 			const prefixes = [
 				{ name: 'root' },
 				{ parent: 'root', name: 'prefix1 prefix1 prefix1' },
@@ -85,22 +84,29 @@
 			<tr>
 				<td rowspan="2" style="vertical-align:center;">
 					<button type="button" id="button{id}" class="btn btn-primary" on:click={toggleIsExpanded}
-						>{isExpanded ? '-' : '+'}</button>
-					</td>
+						>{isExpanded ? '-' : '+'}</button
+					>
+				</td>
 				<td>
 					<span class="font-bold">{word.lemma}</span>
-					{word.pos} ({word.count})</td>
-				</tr>
+					{word.pos} ({word.count})</td
+				>
+			</tr>
 			<tr>
 				<td>
 					<a href={getDictionary(language, word.lemma)} target="_blank">
 						<img class="dictionary-icon" src="/img/dictionary.png" alt="Dictionary icon" />
 					</a>
 					<button type="button" on:click={() => toggleIsTreeShown(lemmaPOS, id)}>
-					    {#if language == 'latin'}
-						    <img class="tree-icon" src="/img/tree-icon.png" alt="tree icon" />
+						{#if language == 'latin'}
+							<img class="tree-icon" src="/img/tree-icon.png" alt="tree icon" />
 						{:else}
-						    <img class="tree-icon" style="opacity:0.25;" src="/img/tree-icon.png" alt="tree icon" />
+							<img
+								class="tree-icon"
+								style="opacity:0.25;"
+								src="/img/tree-icon.png"
+								alt="tree icon"
+							/>
 						{/if}
 					</button>
 				</td>
@@ -138,37 +144,5 @@
 {/if}
 
 <div id="doubletreerow{id}">
-    <div id="doubletree{id}" bind:this={doubletreeContainer} />
+	<div id="doubletree{id}" bind:this={doubletreeContainer} />
 </div>
-
-<!--svelte:head>
-	<style>
-		/*body {
-			position: fixed;
-			left: 0;
-			right: 0;
-			top: 0;
-			bottom: 0;
-			margin: 0;
-			overflow: hidden;
-		}/*
-		/* upstream */
-		path.links-0 {
-			fill: none;
-			stroke: #d3d3d3;
-		}
-		/* downstream */
-		path.links-1 {
-			fill: none;
-			stroke: #d3d3d3;
-		}
-		text {
-			text-shadow: -1px -1px 3px white, -1px 1px 3px white, 1px -1px 3px white, 1px 1px 3px white;
-			pointer-events: none;
-			font-family: 'Playfair Display', serif;
-		}
-		circle {
-			fill: #d3d3d3;
-		}
-	</style>
-</svelte:head-->
