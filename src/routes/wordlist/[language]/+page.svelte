@@ -86,7 +86,6 @@
 <div class="container text-left" style="padding-left: 200px;">
 	<table id="latin-pos-table" class="table-auto" width="100%">
 		{#each words as word, index}
-			<!--WordListRow {word} treeData={allWords.db_list} id={index+1} language='aramaic' /-->
 			<WordListRow {word} treeData="" id={(index + 1).toString()} language={currentLanguage} />
 		{/each}
 	</table>
