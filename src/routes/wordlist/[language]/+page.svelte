@@ -50,7 +50,7 @@
 </h2>
 
 <p style="padding-left: 200px; padding-right: 80px;">
-	The following is the wordlist of Aramaic in the Inscriptions of Israel/Palestine. The list
+	The following is the wordlist of {initialCaps(currentLanguage)} in the Inscriptions of Israel/Palestine. The list
 	presents each headword, its part of speech, and the number of times that word appears in the
 	corpus. To see each of the specific morphological forms, click on the brown button next to the
 	headword. You will be presented with a list of word forms, their morphological data, and counts of
