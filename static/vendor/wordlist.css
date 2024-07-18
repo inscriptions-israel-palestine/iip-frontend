@@ -85,4 +85,24 @@ a > b {
 	color: #00455D;
 }
 
+.accordion {
+  background-color: #e3e0d8;
+  padding: 20px;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  transition: 0.4s;
+  border-bottom: 1px solid black;
+}
+
+.active, .accordion:hover {
+  background-color: #c0beb7; 
+}
+
+.panel {
+  display: none;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
 
