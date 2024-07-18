@@ -12,7 +12,22 @@
 
 	function initialCaps(s: string) {
 		return `${s[0].toUpperCase()}${s.slice(1)}`;
-	}
+	};
+	
+	function lexicon(s: string) {
+		switch (s) {
+			case 'aramaic':
+				return 'Comprehensive Aramaic Lexicon';
+			case 'greek':
+				return 'Perseus Greek dictionary';
+			case 'hebrew':
+				return 'Morfix Hebrew dictionary';
+			case 'latin':
+				return 'Perseus Latin dictionary';
+			default:
+				return s;
+		}
+	};
 </script>
 
 <WordListFilters {words} />
@@ -35,12 +50,23 @@
 <p style="padding-left: 200px; padding-right: 80px;">
 	UNDER CONSTRUCTION
 	<br /><br />
-	Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus mollis lorem ligula, id volutpat
-	tortor condimentum id. Ut bibendum tincidunt neque. Proin eu augue ut urna viverra fringilla. Praesent
-	bibendum finibus elementum. Suspendisse augue sapien, eleifend ut est et, ultricies dignissim nisi.
-	Sed bibendum luctus ligula, quis tempor elit eleifend eget. Cras sed pretium nisi. Donec imperdiet
-	enim in vestibulum dictum. Vivamus ultrices euismod urna a convallis. Maecenas fringilla tortor non
-	tempus ultrices.<br /><br />
+	{#if language != 'aramaic'}
+	The following is list of personal names in {initialCaps(language)} in the Inscriptions of Israel/Palestine. 
+	The list presents each headword for the name, the number of times that name appears in the corpus, the
+	gender of the name, and whether the name has been categorized as a Christian one, a Jewish one, or other.
+	{:else}
+	The following is list of personal names in {initialCaps(language)} in the Inscriptions of Israel/Palestine. 
+	The list presents each headword for the name and the number of times that name appears in the corpus. 
+	<span style="text-decoration: underline;">Data for the gender of the name and the categorization for the name is not yet available for Aramaic.</span>
+	{/if}
+	<br/><br/>
+	To see each of the specific morphological forms, click on the brown button next to the
+	headword. You will be presented with a list of forms, their morphological data, and counts of
+	their appearances in the IIP corpus. This display will also show keyword-in-context views,
+	presenting the contexts in which these names appear.
+	<br/><br/>
+	For the other indices for {initialCaps(language)}, <a href="/wordlist/under_construction/indices/{language}" style="color: grey">click here</a>. For the general {initialCaps(language)} wordlist, <a href="/wordlist/{language}" style="color: grey">click here</a>.
+	<br /><br />
 </p>
 
 <div class="container text-left" style="padding-left: 200px;">
