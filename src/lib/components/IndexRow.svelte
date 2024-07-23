@@ -104,7 +104,7 @@
 						<img class="dictionary-icon" src="/img/dictionary.png" alt="Dictionary icon" />
 					</a>
 					<button type="button" on:click={() => toggleIsTreeShown(lemmaPOS, id)}>
-						{#if language == 'latin'}
+						{#if language == ''}
 							<img class="tree-icon" src="/img/tree-icon.png" alt="tree icon" />
 						{:else}
 							<img
