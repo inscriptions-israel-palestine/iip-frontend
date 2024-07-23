@@ -59,7 +59,7 @@
 	<br /><br />
 	This wordlist provides links to the {lexicon(currentLanguage)}, indicated with the dictionary icon
 	(<img class="sample-icons" alt="dictionary icon" src="/img/dictionary.png" />).
-	{#if currentLanguage === 'latin'}
+	{#if currentLanguage === ''}
 		In addition, it presents <a
 			href="http://linguistics.chrisculy.net/lx/software/DoubleTreeJS/"
 			style="color: grey">Double Tree</a
@@ -78,8 +78,9 @@
 			class="sample-icons"
 			alt="tree icon"
 			src="/img/tree-icon.png"
-		/>) is still in progress for {initialCaps(currentLanguage)} and will be available soon.<br /><br
+		/>) is still in progress and is not yet available.<br /><br
 		/>
+		For the index of Personal Names in {initialCaps(currentLanguage)}, <a href="/wordlist/names/{currentLanguage}" style="color: grey">click here</a>. For the other indices for {initialCaps(currentLanguage)}, <a href="/wordlist/indices/{currentLanguage}" style="color: grey">click here</a>.
 	{/if}
 </p>
 

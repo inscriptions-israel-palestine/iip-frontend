@@ -102,7 +102,7 @@
 <p id="lang-select">
 	<span class="italic">Select language:</span>
 	{#each languages as l}
-		<a href="/wordlist/under_construction/indices/{l}" class="px-1" class:font-bold={l === language}
+		<a href="/wordlist/indices/{l}" class="px-1" class:font-bold={l === language}
 			>{initialCaps(l)}</a
 		>
 	{/each}
@@ -115,8 +115,6 @@
 </h2>
 
 <p>
-	UNDER CONSTRUCTION
-	<br /><br />
 {#if language != 'aramaic'}
 	The following are a set of word indices for {initialCaps(language)} across various different categories in the Inscriptions of Israel/Palestine. Each index header includes a count of how many unique word lemmas are contained in that index. Click on a header to expand the index and view the contents.
 	<br/><br/>
@@ -129,11 +127,21 @@
 	<br /><br />
 	Each word in the different indices provides links to the {lexicon(language)}, indicated with the dictionary icon
 	(<img class="sample-icons" alt="dictionary icon" src="/img/dictionary.png" />). 
+	<a href="http://linguistics.chrisculy.net/lx/software/DoubleTreeJS/" style="color: grey"
+			>Double Tree</a
+		>
+		KWIC visualization functionality (<img
+			class="sample-icons"
+			alt="tree icon"
+			src="/img/tree-icon.png"
+		/>) is still in progress and is not yet available.
 {:else}
+	UNDER CONSTRUCTION
+	<br /><br />
     The general indices for Aramaic are not yet available.
 {/if}
     <br/><br/>
-	For the index of Personal Names in {initialCaps(language)}, <a href="/wordlist/under_construction/names/{language}" style="color: grey">click here</a>. For the general {initialCaps(language)} wordlist, <a href="/wordlist/{language}" style="color: grey">click here</a>.
+	For the index of Personal Names in {initialCaps(language)}, <a href="/wordlist/names/{language}" style="color: grey">click here</a>. For the general {initialCaps(language)} wordlist, <a href="/wordlist/{language}" style="color: grey">click here</a>.
 	<br/><br/>
 </p>
 
