@@ -35,7 +35,7 @@
 <p id="lang-select" style="padding-left: 200px; padding-right: 80px;">
 	<span class="italic">Select language:</span>
 	{#each languages as l}
-		<a href="/wordlist/under_construction/names/{l}" class="px-1" class:font-bold={l === language}
+		<a href="/wordlist/names/{l}" class="px-1" class:font-bold={l === language}
 			>{initialCaps(l)}</a
 		>
 	{/each}
@@ -48,8 +48,6 @@
 </h2>
 
 <p style="padding-left: 200px; padding-right: 80px;">
-	UNDER CONSTRUCTION
-	<br /><br />
 	{#if language != 'aramaic'}
 	The following is list of personal names in {initialCaps(language)} in the Inscriptions of Israel/Palestine. 
 	The list presents each headword for the name, the number of times that name appears in the corpus, the
@@ -65,7 +63,7 @@
 	their appearances in the IIP corpus. This display will also show keyword-in-context views,
 	presenting the contexts in which these names appear.
 	<br/><br/>
-	For the other indices for {initialCaps(language)}, <a href="/wordlist/under_construction/indices/{language}" style="color: grey">click here</a>. For the general {initialCaps(language)} wordlist, <a href="/wordlist/{language}" style="color: grey">click here</a>.
+	For the other indices for {initialCaps(language)}, <a href="/wordlist/indices/{language}" style="color: grey">click here</a>. For the general {initialCaps(language)} wordlist, <a href="/wordlist/{language}" style="color: grey">click here</a>.
 	<br /><br />
 </p>
 

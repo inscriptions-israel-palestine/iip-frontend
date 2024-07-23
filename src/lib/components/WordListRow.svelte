@@ -5,6 +5,7 @@
 	export let language: string;
 	export let id: string;
 	export let treeData;
+	export let wordType;
 
 	let treeDataStr = JSON.stringify(treeData);
 	let doubletreeContainer: HTMLElement;
@@ -89,8 +90,8 @@
 				</td>
 				<td>
 					<span class="font-bold">{word.lemma}</span>
-					{word.pos} ({word.count})</td
-				>
+					{word.pos} ({word.count})
+				</td>
 			</tr>
 			<tr>
 				<td>
@@ -98,7 +99,7 @@
 						<img class="dictionary-icon" src="/img/dictionary.png" alt="Dictionary icon" />
 					</a>
 					<button type="button" on:click={() => toggleIsTreeShown(lemmaPOS, id)}>
-						{#if language == 'latin'}
+						{#if language == ''}
 							<img class="tree-icon" src="/img/tree-icon.png" alt="tree icon" />
 						{:else}
 							<img
