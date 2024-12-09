@@ -8,9 +8,10 @@
 	export let currentPage: number = 1;
 	export let totalPages: number = 1;
 
-	function pageHref(n: number) {
-		const searchParams = new URLSearchParams($page.url.search);
+	$: pages = Array.from({length: totalPages}, (_, i) => i);
+	$: searchParams = new URLSearchParams($page.url.search);
 
+	function pageHref(n: number) {
 		searchParams.set('page', n.toString());
 
 		return `${$page.url.pathname}?${searchParams.toString()}`;
@@ -40,7 +41,7 @@
 	</table>
 	<nav class="flex items-center justify-between border-t border-gray-200 px-4 sm:px-0">
 		<div class="max-w-screen-lg">
-			{#each { length: totalPages } as _, i}
+			{#each pages as i}
 				<a
 					href={pageHref(i + 1)}
 					class={`${
