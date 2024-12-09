@@ -9,9 +9,10 @@
 	export let totalPages: number = 1;
 
 	$: pages = Array.from({length: totalPages}, (_, i) => i);
-	$: searchParams = new URLSearchParams($page.url.search);
 
 	function pageHref(n: number) {
+		const searchParams = new URLSearchParams($page.url.search);
+
 		searchParams.set('page', n.toString());
 
 		return `${$page.url.pathname}?${searchParams.toString()}`;
